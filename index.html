@@ -12,151 +12,165 @@
     </script>
     <script id="MathJax-script" async src="https://cdn.jsdelivr.net/npm/mathjax@3/es5/tex-mml-chtml.js"></script>
     <style>
-        /* 極致毛玻璃效果 */
-        .glass-panel { 
-            background: rgba(30, 41, 59, 0.7); 
-            backdrop-filter: blur(20px) saturate(180%); 
-            border: 1px solid rgba(255, 255, 255, 0.1); 
-        }
-        .glass-card { 
-            background: rgba(255, 255, 255, 0.03); 
-            backdrop-filter: blur(10px); 
-            border: 1px solid rgba(255, 255, 255, 0.05); 
-            transition: all 0.3s ease;
-        }
-        .glass-card:hover { 
-            background: rgba(255, 255, 255, 0.08); 
-            border-color: rgba(99, 102, 241, 0.5);
-            transform: translateY(-5px);
-        }
-        
-        /* 動態流光邊框效果 */
-        @keyframes border-flow {
-            0% { border-color: #6366f1; box-shadow: 0 0 5px #6366f1; }
-            50% { border-color: #ec4899; box-shadow: 0 0 20px #ec4899; }
-            100% { border-color: #6366f1; box-shadow: 0 0 5px #6366f1; }
-        }
-        .neon-border { border: 2px solid; animation: border-flow 4s infinite; }
-        
-        .chat-container { height: calc(100vh - 200px); }
+        .glass { background: rgba(255, 255, 255, 0.05); backdrop-filter: blur(15px); border: 1px solid rgba(255, 255, 255, 0.1); }
+        .intro-gradient { background: linear-gradient(135deg, #1e1b4b 0%, #312e81 100%); }
+        .chat-container { height: calc(100vh - 180px); }
         .custom-scrollbar::-webkit-scrollbar { width: 5px; }
-        .custom-scrollbar::-webkit-scrollbar-thumb { background: linear-gradient(#6366f1, #ec4899); border-radius: 10px; }
+        .custom-scrollbar::-webkit-scrollbar-thumb { background: #6366f1; border-radius: 10px; }
         .recording { animation: pulse 1s infinite; color: #f43f5e !important; }
-        @keyframes pulse { 0%, 100% { opacity: 1; transform: scale(1); } 50% { opacity: 0.5; transform: scale(1.2); } }
-        
+        @keyframes pulse { 0%, 100% { transform: scale(1); opacity: 1; } 50% { transform: scale(1.1); opacity: 0.7; } }
         .no-scrollbar::-webkit-scrollbar { display: none; }
     </style>
 </head>
-<body class="bg-[#020617] font-sans text-slate-200 overflow-hidden">
+<body class="bg-[#0f172a] font-sans text-slate-200">
 
-    <div id="info-modal" class="fixed inset-0 z-[120] bg-black/90 backdrop-blur-xl hidden flex items-center justify-center p-4">
-        <div class="glass-panel w-full max-w-3xl rounded-[2.5rem] p-10 max-h-[85vh] overflow-y-auto custom-scrollbar shadow-2xl">
-            <div class="flex justify-between items-center mb-10 border-b border-white/10 pb-6">
-                <div>
-                    <h2 class="text-4xl font-black text-white italic tracking-tighter">SYSTEM ARCHIVE</h2>
-                    <p class="text-indigo-400 text-xs font-bold uppercase tracking-[0.3em] mt-2">版本演進全記錄</p>
-                </div>
-                <button onclick="toggleInfo(false)" class="text-slate-500 hover:text-white transition-colors"><i class="fas fa-times text-2xl"></i></button>
-            </div>
+    <div id="intro-screen" class="fixed inset-0 z-[200] intro-gradient flex items-center justify-center p-6 transition-all duration-700">
+        <div class="max-w-4xl w-full glass rounded-[2.5rem] p-10 md:p-16 text-center shadow-2xl">
+            <h1 class="text-4xl md:text-6xl font-bold text-white mb-4">AI 學習助手</h1>
+            <div class="inline-block px-4 py-1 rounded-full bg-indigo-500 text-white text-xs font-bold mb-8">版本 v3.0 更新</div>
             
-            <div class="space-y-12">
-                <div class="relative pl-8 border-l-2 border-indigo-500">
-                    <div class="absolute -left-[9px] top-0 w-4 h-4 rounded-full bg-indigo-500 shadow-[0_0_15px_#6366f1]"></div>
-                    <h3 class="text-xl font-bold text-white mb-2">v3.0 PHANTOM (當前版本)</h3>
-                    <p class="text-slate-400 text-sm leading-relaxed mb-4">全面視覺重構，導入 Ultra-Glassmorphism 設計語言。強化系統診斷與連線測試模組，實現學術級數據導出。</p>
-                    <div class="flex gap-2 flex-wrap">
-                        <span class="bg-indigo-500/20 text-indigo-300 text-[10px] px-2 py-1 rounded-md border border-indigo-500/30">視覺革命</span>
-                        <span class="bg-pink-500/20 text-pink-300 text-[10px] px-2 py-1 rounded-md border border-pink-500/30">穩定連線</span>
+            <div class="grid grid-cols-1 md:grid-cols-2 gap-6 text-left mb-10">
+                <div class="flex items-start gap-4 p-4 rounded-2xl bg-white/5">
+                    <i class="fas fa-check-circle text-emerald-400 mt-1"></i>
+                    <div>
+                        <h3 class="text-white font-bold">全新模型廣場</h3>
+                        <p class="text-slate-400 text-sm">支援一次過對比唔同 AI 嘅優缺點，仲可以即時測試連唔連到。</p>
                     </div>
                 </div>
-
-                <div class="relative pl-8 border-l-2 border-slate-700">
-                    <div class="absolute -left-[9px] top-0 w-4 h-4 rounded-full bg-slate-700"></div>
-                    <h3 class="text-xl font-bold text-slate-300 mb-2">v2.0 MEGA REVOLUTION</h3>
-                    <p class="text-slate-500 text-sm leading-relaxed mb-4">功能大爆發。加入全學科導航、語音辨識、文件分析功能。首次引入 LocalStorage 記憶引擎，實現離線數據留存。</p>
+                <div class="flex items-start gap-4 p-4 rounded-2xl bg-white/5">
+                    <i class="fas fa-check-circle text-emerald-400 mt-1"></i>
+                    <div>
+                        <h3 class="text-white font-bold">全方位語音支援</h3>
+                        <p class="text-slate-400 text-sm">針對 Mac 同 iPhone 嘅 Safari 瀏覽器優化，依家講嘢都通。</p>
+                    </div>
                 </div>
-
-                <div class="relative pl-8 border-l-2 border-slate-800">
-                    <div class="absolute -left-[9px] top-0 w-4 h-4 rounded-full bg-slate-800"></div>
-                    <h3 class="text-xl font-bold text-slate-600 mb-2">v1.0 ORIGIN</h3>
-                    <p class="text-slate-600 text-sm leading-relaxed mb-4">原型建立。初步實現 DeepSeek 與 Qwen API 的對接，奠定基礎聊天框架與 MathJax 公式渲染邏輯。</p>
+                <div class="flex items-start gap-4 p-4 rounded-2xl bg-white/5">
+                    <i class="fas fa-check-circle text-emerald-400 mt-1"></i>
+                    <div>
+                        <h3 class="text-white font-bold">自動儲存對話</h3>
+                        <p class="text-slate-400 text-sm">傾完偈自動幫你記住，下次返嚟啲紀錄仲喺度，唔驚唔見。</p>
+                    </div>
+                </div>
+                <div class="flex items-start gap-4 p-4 rounded-2xl bg-white/5">
+                    <i class="fas fa-check-circle text-emerald-400 mt-1"></i>
+                    <div>
+                        <h3 class="text-white font-bold">一鍵導出筆記</h3>
+                        <p class="text-slate-400 text-sm">可以將成個對話整成 PDF 檔案，溫書複習超級方便。</p>
+                    </div>
                 </div>
             </div>
-            
-            <button onclick="toggleInfo(false)" class="w-full mt-12 bg-white text-black py-4 rounded-2xl font-black uppercase tracking-widest hover:bg-indigo-500 hover:text-white transition-all">CLOSE ARCHIVE</button>
+
+            <button onclick="closeIntro()" class="bg-indigo-600 hover:bg-indigo-500 text-white px-10 py-4 rounded-2xl text-lg font-bold transition-all shadow-lg active:scale-95">
+                開始使用
+            </button>
         </div>
     </div>
 
-    <div id="model-modal" class="fixed inset-0 z-[100] bg-black/95 backdrop-blur-2xl hidden flex items-center justify-center p-4">
-        <div class="glass-panel rounded-[3rem] w-full max-w-6xl max-h-[90vh] overflow-y-auto p-12">
-            <div class="flex justify-between items-center mb-12">
-                <h2 class="text-5xl font-black text-transparent bg-clip-text bg-gradient-to-r from-indigo-400 to-pink-500 italic">MODEL ARENA</h2>
-                <button onclick="closeModelModal()" class="text-slate-500 hover:text-white transition-colors"><i class="fas fa-times text-2xl"></i></button>
+    <div id="history-modal" class="fixed inset-0 z-[150] bg-black/80 backdrop-blur-md hidden flex items-center justify-center p-4">
+        <div class="bg-slate-800 w-full max-w-2xl rounded-[2rem] p-8 border border-slate-700 shadow-2xl">
+            <div class="flex justify-between items-center mb-8 border-b border-slate-700 pb-4">
+                <h2 class="text-2xl font-bold">版本更新與系統說明</h2>
+                <button onclick="toggleHistory(false)" class="text-slate-400 hover:text-white"><i class="fas fa-times text-xl"></i></button>
             </div>
-            <div class="grid md:grid-cols-3 gap-8" id="model-cards"></div>
+            <div class="space-y-6 overflow-y-auto max-h-[60vh] pr-2 custom-scrollbar text-sm">
+                <div class="border-l-4 border-indigo-500 pl-4 mb-8">
+                    <h3 class="font-bold text-lg">v3.0 版本 (當前版本)</h3>
+                    <p class="text-slate-400 mt-1 italic">全新設計語法與穩定性提升</p>
+                    <ul class="list-disc list-inside mt-2 text-slate-300 space-y-1">
+                        <li>新增全屏介紹介面。</li>
+                        <li>針對 Safari 瀏覽器進行語音兼容性底層修改。</li>
+                        <li>優化模型選擇廣場，加入詳細優缺點分析。</li>
+                        <li>修正 PDF 導出時數學公式嘅顯示問題。</li>
+                    </ul>
+                </div>
+                <div class="border-l-4 border-slate-600 pl-4 mb-8 opacity-60">
+                    <h3 class="font-bold">v2.0 版本</h3>
+                    <ul class="list-disc list-inside mt-2 text-slate-400 space-y-1">
+                        <li>加入語音辨識提問功能。</li>
+                        <li>支援上傳 .txt / .md 文件讀取。</li>
+                        <li>新增全學科選擇導航欄（數學、英文、科學等）。</li>
+                        <li>引入 LocalStorage 自動儲存對話紀錄。</li>
+                    </ul>
+                </div>
+                <div class="border-l-4 border-slate-700 pl-4 opacity-40">
+                    <h3 class="font-bold">v1.0 版本</h3>
+                    <ul class="list-disc list-inside mt-2 text-slate-500 space-y-1">
+                        <li>建立基礎 AI 對話框架。</li>
+                        <li>支援 MathJax 數學公式渲染。</li>
+                        <li>對接 DeepSeek 與 Qwen API。</li>
+                    </ul>
+                </div>
+            </div>
+            <button onclick="toggleHistory(false)" class="w-full mt-8 bg-slate-700 py-3 rounded-xl font-bold">返回網頁</button>
+        </div>
+    </div>
+
+    <div id="model-modal" class="fixed inset-0 z-[140] bg-black/90 backdrop-blur-lg hidden flex items-center justify-center p-4">
+        <div class="bg-slate-800 rounded-[2.5rem] w-full max-w-5xl max-h-[90vh] overflow-y-auto p-10 border border-slate-700">
+            <div class="flex justify-between items-center mb-8">
+                <h2 class="text-3xl font-bold">模型廣場</h2>
+                <button onclick="closeModelModal()" class="text-slate-400 hover:text-white"><i class="fas fa-times text-xl"></i></button>
+            </div>
+            <div class="grid md:grid-cols-3 gap-6" id="model-cards"></div>
         </div>
     </div>
 
     <div class="flex h-screen">
-        <aside class="w-80 glass-panel flex flex-col p-8 border-r border-white/5">
-            <div class="mb-12">
-                <div class="flex items-center gap-3 mb-2">
-                    <div class="w-3 h-3 rounded-full bg-emerald-500 animate-pulse"></div>
-                    <h1 class="text-2xl font-black text-white tracking-tighter uppercase">AI 學習助手</h1>
-                </div>
-                <div class="px-3 py-1 bg-indigo-500/10 border border-indigo-500/30 rounded-lg inline-block">
-                    <span class="text-[10px] text-indigo-400 font-black tracking-[0.2em]">V3.0 PHANTOM</span>
+        <aside class="w-72 bg-[#0a0f1d] flex flex-col p-6 border-r border-white/5">
+            <div class="mb-10">
+                <h1 class="text-2xl font-bold text-white tracking-tighter">AI 學習助手</h1>
+                <div class="mt-2 flex items-center gap-2">
+                    <span class="text-[10px] bg-indigo-500/20 text-indigo-400 px-2 py-0.5 rounded-full font-bold">v3.0.0</span>
                 </div>
             </div>
 
-            <nav class="flex-1 space-y-4">
-                <button onclick="openModelModal()" class="w-full glass-card p-5 rounded-2xl flex items-center justify-between group">
-                    <span class="text-sm font-bold text-slate-300"><i class="fas fa-microchip mr-3 text-indigo-500"></i> 模型矩陣</span>
-                    <i class="fas fa-arrow-right text-[10px] opacity-30 group-hover:translate-x-2 transition-transform"></i>
+            <nav class="flex-1 space-y-2">
+                <button onclick="openModelModal()" class="w-full bg-slate-800 hover:bg-indigo-600 p-4 rounded-2xl flex items-center justify-between transition-all group">
+                    <span class="text-sm font-medium"><i class="fas fa-th-large mr-2"></i> 模型廣場</span>
+                    <i class="fas fa-chevron-right text-[10px] opacity-30"></i>
                 </button>
-                <button onclick="toggleInfo(true)" class="w-full glass-card p-5 rounded-2xl flex items-center justify-between group">
-                    <span class="text-sm font-bold text-slate-300"><i class="fas fa-history mr-3 text-pink-500"></i> 歷史版本日誌</span>
-                    <i class="fas fa-plus text-[10px] opacity-30 group-hover:rotate-90 transition-transform"></i>
+                <button onclick="toggleHistory(true)" class="w-full bg-slate-800/40 hover:bg-slate-800 p-4 rounded-2xl flex items-center justify-between text-slate-400 transition-all">
+                    <span class="text-sm font-medium"><i class="fas fa-info-circle mr-2"></i> 系統更新與說明</span>
+                    <i class="fas fa-chevron-right text-[10px] opacity-30"></i>
                 </button>
             </nav>
 
-            <div class="mt-auto space-y-4 pt-8 border-t border-white/5">
-                <button onclick="exportToPDF()" class="w-full neon-border py-4 rounded-2xl text-xs font-black uppercase tracking-widest text-white transition-all active:scale-95">
-                    導出 PDF 數據
+            <div class="pt-6 space-y-2 border-t border-slate-800">
+                <button onclick="exportToPDF()" class="w-full bg-emerald-600 hover:bg-emerald-700 py-3 rounded-xl text-sm font-bold text-white transition-all shadow-lg">
+                    <i class="fas fa-file-pdf mr-2"></i> 導出學習筆記
                 </button>
-                <button onclick="clearHistory()" class="w-full text-[10px] text-slate-600 font-bold hover:text-rose-500 transition-colors uppercase tracking-[0.3em]">
-                    核心重置
+                <button onclick="clearHistory()" class="w-full text-[10px] text-slate-600 font-bold hover:text-rose-500 py-2 uppercase tracking-widest">
+                    清除所有歷史紀錄
                 </button>
             </div>
         </aside>
 
-        <main class="flex-1 flex flex-col relative overflow-hidden">
-            <div class="absolute -top-40 -right-40 w-96 h-96 bg-indigo-600/10 rounded-full blur-[120px]"></div>
-            <div class="absolute -bottom-40 -left-40 w-96 h-96 bg-pink-600/10 rounded-full blur-[120px]"></div>
-
-            <header class="p-6 border-b border-white/5 bg-black/20 backdrop-blur-md">
-                <div class="flex gap-3 overflow-x-auto no-scrollbar w-full" id="subject-scroll">
-                    <button onclick="setSubject('綜合')" class="sub-btn px-6 py-2 rounded-xl bg-indigo-600 text-white text-[11px] font-black shadow-lg shadow-indigo-500/20">綜合</button>
-                    <button onclick="setSubject('數學')" class="sub-btn px-6 py-2 rounded-xl bg-white/5 text-slate-400 text-[11px] font-black hover:bg-white/10 transition-all">數學</button>
-                    <button onclick="setSubject('英文')" class="sub-btn px-6 py-2 rounded-xl bg-white/5 text-slate-400 text-[11px] font-black hover:bg-white/10 transition-all">英文</button>
-                    <button onclick="setSubject('科學')" class="sub-btn px-6 py-2 rounded-xl bg-white/5 text-slate-400 text-[11px] font-black hover:bg-white/10 transition-all">科學</button>
-                    <button onclick="setSubject('歷史')" class="sub-btn px-6 py-2 rounded-xl bg-white/5 text-slate-400 text-[11px] font-black hover:bg-white/10 transition-all">歷史</button>
+        <main class="flex-1 flex flex-col bg-[#0f172a]">
+            <header class="p-4 border-b border-slate-800 bg-slate-900/50 backdrop-blur-md">
+                <div class="flex gap-2 overflow-x-auto no-scrollbar w-full" id="subject-scroll">
+                    <button onclick="setSubject('綜合')" class="sub-btn px-6 py-2 rounded-full bg-indigo-600 text-white text-xs font-bold whitespace-nowrap">綜合</button>
+                    <button onclick="setSubject('數學')" class="sub-btn px-6 py-2 rounded-full bg-slate-800 text-slate-400 text-xs font-bold whitespace-nowrap">數學</button>
+                    <button onclick="setSubject('英文')" class="sub-btn px-6 py-2 rounded-full bg-slate-800 text-slate-400 text-xs font-bold whitespace-nowrap">英文</button>
+                    <button onclick="setSubject('科學')" class="sub-btn px-6 py-2 rounded-full bg-slate-800 text-slate-400 text-xs font-bold whitespace-nowrap">科學</button>
+                    <button onclick="setSubject('歷史')" class="sub-btn px-6 py-2 rounded-full bg-slate-800 text-slate-400 text-xs font-bold whitespace-nowrap">歷史</button>
                 </div>
             </header>
 
-            <div id="chat-window" class="chat-container overflow-y-auto p-8 space-y-10 custom-scrollbar relative z-10">
-                </div>
+            <div id="chat-window" class="chat-container overflow-y-auto p-6 space-y-6 custom-scrollbar"></div>
 
-            <div class="p-8 relative z-20">
-                <div class="max-w-5xl mx-auto glass-panel p-2 rounded-[2.5rem] shadow-2xl flex items-end gap-2 focus-within:ring-2 ring-indigo-500/50 transition-all">
-                    <button onclick="document.getElementById('file-input').click()" class="p-4 text-slate-500 hover:text-indigo-400 transition-colors"><i class="fas fa-paperclip text-lg"></i></button>
+            <div id="file-preview" class="hidden mx-6 p-2 bg-indigo-500/10 border border-indigo-500/20 rounded-t-xl text-[10px] flex items-center justify-between">
+                <span id="file-name" class="text-indigo-400 font-bold truncate"></span>
+                <button onclick="clearFile()" class="text-rose-500 px-2"><i class="fas fa-times-circle text-lg"></i></button>
+            </div>
+
+            <div class="p-6 bg-slate-900/50 backdrop-blur-md border-t border-slate-800">
+                <div class="max-w-4xl mx-auto flex items-end gap-2 bg-slate-800 border border-slate-700 rounded-3xl p-2 focus-within:border-indigo-500 transition-all shadow-xl">
+                    <button onclick="document.getElementById('file-input').click()" class="p-4 text-slate-500 hover:text-indigo-400"><i class="fas fa-paperclip text-lg"></i></button>
                     <input type="file" id="file-input" class="hidden" onchange="handleFile(event)">
-                    
-                    <textarea id="user-input" rows="1" placeholder="輸入學術請求..." class="flex-1 bg-transparent border-none focus:ring-0 text-sm py-4 px-2 text-white resize-none"></textarea>
-                    
+                    <textarea id="user-input" rows="1" placeholder="輸入你想學習嘅內容..." class="flex-1 bg-transparent border-none focus:ring-0 text-sm py-4 px-2 text-white resize-none"></textarea>
                     <button id="voice-btn" onclick="toggleVoice()" class="p-4 text-slate-500 hover:text-rose-400 transition-all"><i class="fas fa-microphone text-lg" id="mic-icon"></i></button>
-                    <button id="send-btn" onclick="sendMessage()" class="bg-white text-black w-14 h-14 rounded-[1.5rem] hover:bg-indigo-500 hover:text-white transition-all shadow-xl flex items-center justify-center active:scale-90">
-                        <i class="fas fa-paper-plane text-xl"></i>
+                    <button id="send-btn" onclick="sendMessage()" class="bg-indigo-600 text-white w-12 h-12 rounded-2xl hover:bg-indigo-500 flex items-center justify-center transition-all active:scale-90 shadow-lg">
+                        <i class="fas fa-paper-plane"></i>
                     </button>
                 </div>
             </div>
@@ -165,38 +179,46 @@
 
     <script>
         const CONFIG = {
-            qwen: { name: "Qwen Phantom", key: 'sk-c5fcac1f9c804077af50a3d1217e92c2', url: 'https://dashscope.aliyuncs.com/compatible-mode/v1/chat/completions', model: 'qwen-plus', icon: 'fa-cloud', color: 'indigo', pros: "高連線穩定度，適合即時互動。", cons: "深度推理細節稍顯簡略。" },
-            deepseek: { name: "DeepSeek V3", key: 'sk-6722fcd2a3b34d80bede9e71746d2dfc', url: 'https://api.deepseek.com/chat/completions', model: 'deepseek-chat', icon: 'fa-brain', color: 'pink', pros: "頂尖數學與邏輯建模能力。", cons: "CORS 攔截風險較高。" },
-            poe: { name: "POE GPT-4o", key: 'zzOkQ4jDtpyVD9QqB2fuN9XRlIS1r_gijrXN6_gY1Zc', url: 'https://api.poe.com/v1/chat/completions', model: 'GPT-4o', icon: 'fa-bolt', color: 'yellow', pros: "最強大模態模型，語意理解完美。", cons: "環境限制最為嚴苛。" }
+            qwen: { name: "阿里 Qwen", key: 'sk-c5fcac1f9c804077af50a3d1217e92c2', url: 'https://dashscope.aliyuncs.com/compatible-mode/v1/chat/completions', model: 'qwen-plus', icon: 'fa-cloud', color: 'indigo', pros: "穩定性高，中文理解能力強。", cons: "長篇學術推論偶爾較簡短。" },
+            deepseek: { name: "DeepSeek V3", key: 'sk-6722fcd2a3b34d80bede9e71746d2dfc', url: 'https://api.deepseek.com/chat/completions', model: 'deepseek-chat', icon: 'fa-brain', color: 'pink', pros: "邏輯推理與數學解題能力出色。", cons: "常駐 CORS 限制，容易連線失敗。" },
+            poe: { name: "POE API", key: 'zzOkQ4jDtpyVD9QqB2fuN9XRlIS1r_gijrXN6_gY1Zc', url: 'https://api.poe.com/v1/chat/completions', model: 'GPT-4o', icon: 'fa-bolt', color: 'yellow', pros: "整合多種高級模型，回答最詳細。", cons: "限制極多，需要特殊網絡環境。" }
         };
 
-        let selectedModel = 'qwen';
+        let selectedModelId = 'qwen';
         let currentSubject = '綜合';
-        let chatHistory = JSON.parse(localStorage.getItem('phantom_history')) || [];
+        let chatHistory = JSON.parse(localStorage.getItem('study_v3_history')) || [];
+        let attachedContent = "";
 
-        // 功能：切換 Model 選單
+        // 控制功能
+        function closeIntro() { document.getElementById('intro-screen').classList.add('opacity-0', 'pointer-events-none'); }
+        function toggleHistory(show) { document.getElementById('history-modal').classList.toggle('hidden', !show); }
+        function openModelModal() { document.getElementById('model-modal').classList.remove('hidden'); initModelCards(); }
+        function closeModelModal() { document.getElementById('model-modal').classList.add('hidden'); }
+
+        // 模型廣場卡片
         function initModelCards() {
             const container = document.getElementById('model-cards');
             container.innerHTML = '';
             Object.keys(CONFIG).forEach(id => {
                 const m = CONFIG[id];
                 const card = document.createElement('div');
-                card.className = `glass-card p-8 rounded-[2.5rem] flex flex-col ${selectedModel === id ? 'ring-2 ring-indigo-500' : ''}`;
+                card.className = `p-6 rounded-[2rem] border-2 transition-all flex flex-col ${selectedModelId === id ? 'border-indigo-500 bg-indigo-500/5' : 'border-slate-700'}`;
                 card.innerHTML = `
-                    <div class="flex items-center gap-5 mb-8">
-                        <div class="w-14 h-14 rounded-2xl bg-${m.color}-500/20 text-${m.color}-400 flex items-center justify-center text-2xl shadow-inner"><i class="fas ${m.icon}"></i></div>
-                        <div><h3 class="text-xl font-black">${m.name}</h3><span class="text-[9px] text-slate-500 font-mono">${m.model}</span></div>
+                    <div class="flex items-center gap-4 mb-4">
+                        <div class="w-12 h-12 rounded-xl bg-indigo-500/20 text-indigo-400 flex items-center justify-center text-xl"><i class="fas ${m.icon}"></i></div>
+                        <div><h3 class="font-bold">${m.name}</h3><span class="text-[10px] text-slate-500 font-mono">${m.model}</span></div>
                     </div>
-                    <div class="flex-1 text-xs space-y-3 mb-10 leading-relaxed text-slate-400">
-                        <p><b class="text-white uppercase">Strength:</b> ${m.pros}</p>
-                        <p><b class="text-white uppercase">Warning:</b> ${m.cons}</p>
+                    <div class="flex-1 text-xs space-y-3 mb-6">
+                        <p><b class="text-emerald-500 uppercase">優點:</b> ${m.pros}</p>
+                        <p><b class="text-rose-500 uppercase">缺點:</b> ${m.cons}</p>
                     </div>
-                    <div class="space-y-4">
-                        <button onclick="testModel('${id}', this)" class="w-full py-3 bg-white/5 rounded-xl text-[10px] font-black uppercase tracking-widest hover:bg-indigo-500 transition-colors">Connect Test</button>
-                        <button onclick="selectModel('${id}')" class="w-full py-4 ${selectedModel === id ? 'bg-indigo-600' : 'bg-slate-700'} text-white rounded-xl text-sm font-black shadow-lg">Activate</button>
+                    <div class="space-y-2">
+                        <button onclick="testModel('${id}', this)" class="w-full py-2 bg-slate-700 rounded-lg text-xs font-bold hover:bg-slate-600 transition-all">連線測試</button>
+                        <button onclick="selectModel('${id}')" class="w-full py-3 ${selectedModelId === id ? 'bg-indigo-600' : 'bg-slate-900'} text-white rounded-xl text-sm font-bold">${selectedModelId === id ? '使用中' : '選擇此模型'}</button>
                     </div>`;
                 container.appendChild(card);
             });
+            document.getElementById('active-model-name').innerText = CONFIG[selectedModelId].name;
         }
 
         async function testModel(id, btn) {
@@ -204,17 +226,14 @@
             btn.innerHTML = '<i class="fas fa-spinner fa-spin"></i>';
             try {
                 const res = await fetch(config.url, { method: 'POST', headers: { 'Content-Type': 'application/json', 'Authorization': `Bearer ${config.key}` }, body: JSON.stringify({ model: config.model, messages: [{role:"user",content:"hi"}], max_tokens: 5 }) });
-                btn.innerHTML = res.ok ? '<span class="text-emerald-400">SUCCESS</span>' : `<span class="text-rose-400">ERROR ${res.status}</span>`;
-            } catch { btn.innerHTML = '<span class="text-rose-400">CORS BLOCKED</span>'; }
-            setTimeout(() => btn.innerText = 'Connect Test', 3000);
+                btn.innerHTML = res.ok ? "✅ 成功" : `❌ 失敗(${res.status})`;
+            } catch { btn.innerHTML = "❌ CORS 攔截"; }
+            setTimeout(() => btn.innerText = "連線測試", 2000);
         }
 
-        function selectModel(id) { selectedModel = id; initModelCards(); closeModelModal(); appendSystemMessage(`Engine Switched: ${CONFIG[id].name}`); }
-        function openModelModal() { document.getElementById('model-modal').classList.remove('hidden'); initModelCards(); }
-        function closeModelModal() { document.getElementById('model-modal').classList.add('hidden'); }
-        function toggleInfo(show) { document.getElementById('info-modal').classList.toggle('hidden', !show); }
+        function selectModel(id) { selectedModelId = id; initModelCards(); closeModelModal(); appendSystemMessage(`核心引擎已切換：${CONFIG[id].name}`); }
 
-        // --- Safari & All Voice Fix ---
+        // 語音識別 (Safari 兼容版)
         const SpeechRecognition = window.SpeechRecognition || window.webkitSpeechRecognition;
         let recognition = null;
         if (SpeechRecognition) {
@@ -223,20 +242,37 @@
             recognition.onresult = (e) => { document.getElementById('user-input').value += e.results[0][0].transcript; toggleVoiceUI(false); };
             recognition.onend = () => toggleVoiceUI(false);
         }
-        function toggleVoice() { if (!recognition) return alert("Browser Unsupported."); toggleVoiceUI(true); try { recognition.start(); } catch(e) { recognition.stop(); } }
+        function toggleVoice() { if (!recognition) return alert("閣下嘅瀏覽器唔支援語音輸入。"); toggleVoiceUI(true); try { recognition.start(); } catch(e) { recognition.stop(); } }
         function toggleVoiceUI(isRec) { document.getElementById('mic-icon').classList.toggle('recording', isRec); }
 
-        // --- 核心聊天邏輯 ---
+        // 文件上傳
+        function handleFile(e) {
+            const file = e.target.files[0];
+            if(!file) return;
+            const reader = new FileReader();
+            reader.onload = (ev) => {
+                attachedContent = ev.target.result;
+                document.getElementById('file-preview').classList.remove('hidden');
+                document.getElementById('file-name').innerText = `已讀取文件：${file.name}`;
+            };
+            reader.readAsText(file);
+        }
+        function clearFile() { attachedContent = ""; document.getElementById('file-preview').classList.add('hidden'); }
+
+        // 發送訊息
         async function sendMessage() {
             const input = document.getElementById('user-input');
             const text = input.value.trim();
-            if (!text) return;
-            appendMessage('user', text);
+            if(!text && !attachedContent) return;
+
+            appendMessage('user', text || "正在分析文件內容...");
             input.value = '';
-            chatHistory.push({ role: "user", content: `(Subject: ${currentSubject}) ${text}` });
+            
+            chatHistory.push({ role: "user", content: `(學科: ${currentSubject}) ${attachedContent ? '[文件內容]: '+attachedContent : ''} ${text}` });
             saveHistory();
+
             try {
-                const config = CONFIG[selectedModel];
+                const config = CONFIG[selectedModelId];
                 const res = await fetch(config.url, {
                     method: 'POST',
                     headers: { 'Content-Type': 'application/json', 'Authorization': `Bearer ${config.key}` },
@@ -247,44 +283,46 @@
                 appendMessage('ai', aiReply);
                 chatHistory.push({ role: "assistant", content: aiReply });
                 saveHistory();
-            } catch { appendMessage('ai', "Signal Interrupted. Please perform a Connection Test in the Model Arena."); }
+                clearFile();
+            } catch { appendMessage('ai', "連線失敗。請嘗試在「模型廣場」進行測試或切換模型。"); }
         }
 
         function appendMessage(role, text) {
             const win = document.getElementById('chat-window');
             const div = document.createElement('div');
-            div.className = `flex items-start gap-5 ${role === 'user' ? 'flex-row-reverse animate-slide-left' : 'animate-slide-right'}`;
+            div.className = `flex items-start gap-4 ${role === 'user' ? 'flex-row-reverse' : ''}`;
             div.innerHTML = `
-                <div class="w-12 h-12 rounded-[1.2rem] flex-shrink-0 flex items-center justify-center ${role === 'user' ? 'bg-slate-800 border border-white/5' : 'bg-indigo-600 shadow-[0_0_20px_#6366f144] text-white'}"><i class="fas ${role === 'user' ? 'fa-user' : 'fa-robot'}"></i></div>
-                <div class="px-7 py-5 rounded-[2rem] text-sm max-w-[80%] leading-relaxed ${role === 'user' ? 'bg-indigo-600 text-white shadow-xl' : 'glass-card text-slate-200'}">${text}</div>
+                <div class="w-10 h-10 rounded-xl flex-shrink-0 flex items-center justify-center ${role === 'user' ? 'bg-slate-700' : 'bg-indigo-600 text-white shadow-lg'}"><i class="fas ${role === 'user' ? 'fa-user' : 'fa-robot'}"></i></div>
+                <div class="px-6 py-4 rounded-2xl text-sm max-w-[85%] whitespace-pre-wrap leading-relaxed ${role === 'user' ? 'bg-indigo-600 text-white shadow-xl' : 'bg-slate-800 text-slate-200 border border-slate-700 shadow-sm'}">${text}</div>
             `;
             win.appendChild(div);
             win.scrollTop = win.scrollHeight;
             if (window.MathJax) window.MathJax.typesetPromise([div]);
         }
 
-        function saveHistory() { localStorage.setItem('phantom_history', JSON.stringify(chatHistory)); }
-        function clearHistory() { if(confirm("確定清除核心數據？")) { localStorage.removeItem('phantom_history'); location.reload(); } }
+        function saveHistory() { localStorage.setItem('study_v3_history', JSON.stringify(chatHistory)); }
+        function clearHistory() { if(confirm("確定重置系統？所有紀錄將被永久清除。")) { localStorage.removeItem('study_v3_history'); location.reload(); } }
         function appendSystemMessage(t) {
             const div = document.createElement('div');
-            div.className = "flex justify-center my-6";
-            div.innerHTML = `<span class="text-[9px] bg-white/5 text-slate-500 px-5 py-2 rounded-full font-black uppercase tracking-[0.4em] border border-white/5">${t}</span>`;
+            div.className = "flex justify-center my-4";
+            div.innerHTML = `<span class="text-[9px] bg-slate-800 text-slate-500 px-4 py-1 rounded-full font-bold uppercase tracking-widest border border-slate-700">${t}</span>`;
             document.getElementById('chat-window').appendChild(div);
         }
 
         function setSubject(sub) {
             currentSubject = sub;
             document.querySelectorAll('.sub-btn').forEach(b => {
-                b.className = b.innerText === sub ? "sub-btn px-6 py-2 rounded-xl bg-indigo-600 text-white text-[11px] font-black shadow-lg" : "sub-btn px-6 py-2 rounded-xl bg-white/5 text-slate-400 text-[11px] font-black hover:bg-white/10";
+                b.className = b.innerText === sub ? "sub-btn px-6 py-2 rounded-full bg-indigo-600 text-white text-xs font-bold shadow-lg" : "sub-btn px-6 py-2 rounded-full bg-slate-800 text-slate-400 text-xs font-bold hover:bg-slate-700";
             });
-            appendSystemMessage(`Switch Mode: ${sub}`);
+            appendSystemMessage(`模式切換：${sub}`);
         }
 
-        function exportToPDF() { html2pdf().from(document.getElementById('chat-window')).save(`Note_${Date.now()}.pdf`); }
+        function exportToPDF() { html2pdf().from(document.getElementById('chat-window')).save(`學習筆記_${Date.now()}.pdf`); }
+
         window.onload = () => {
             initModelCards();
             chatHistory.forEach(m => appendMessage(m.role, m.content));
-            if(chatHistory.length === 0) appendMessage('ai', "核心已啟動。準備好進行高階學術交互。");
+            if(chatHistory.length === 0) appendMessage('ai', "歡迎使用 AI 學習助手 v3.0。請隨時向我提問，或在側邊欄切換模型與查看更新說明。");
         };
 
         document.getElementById('user-input').addEventListener('input', function() { this.style.height = 'auto'; this.style.height = (this.scrollHeight) + 'px'; });
