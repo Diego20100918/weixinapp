@@ -16,22 +16,23 @@
         .custom-scrollbar::-webkit-scrollbar { width: 4px; }
         .custom-scrollbar::-webkit-scrollbar-thumb { background: #cbd5e1; border-radius: 10px; }
         .modal-overlay { background-color: rgba(15, 23, 42, 0.9); backdrop-filter: blur(4px); }
+        /* 科目欄左右滑動樣式 */
+        .subject-scroll { overflow-x: auto; white-space: nowrap; -webkit-overflow-scrolling: touch; }
+        .subject-scroll::-webkit-scrollbar { display: none; }
     </style>
 </head>
-<body class="bg-slate-50 font-sans transition-colors duration-300">
+<body class="bg-slate-50 font-sans">
 
     <div id="model-modal" class="fixed inset-0 z-50 modal-overlay flex items-center justify-center hidden p-4">
         <div class="bg-white rounded-3xl w-full max-w-5xl max-h-[90vh] overflow-y-auto p-8 shadow-2xl">
             <div class="flex justify-between items-center mb-8">
                 <div>
                     <h2 class="text-3xl font-bold text-slate-900">選擇 AI 模型</h2>
-                    <p class="text-slate-500 mt-2">請根據你的網路環境和學科需求選擇最合適的 AI 引擎</p>
+                    <p class="text-slate-500 mt-2 text-sm">每個模型都有其獨特的強項，請根據學科需要進行切換</p>
                 </div>
-                <button onclick="closeModelModal()" class="text-slate-400 hover:text-slate-600 text-2xl"><i class="fas fa-times"></i></button>
+                <button onclick="closeModelModal()" class="text-slate-400 hover:text-slate-600"><i class="fas fa-times text-2xl"></i></button>
             </div>
-
-            <div class="grid md:grid-cols-3 gap-6" id="model-cards">
-                </div>
+            <div class="grid md:grid-cols-3 gap-6" id="model-cards"></div>
         </div>
     </div>
 
@@ -39,47 +40,49 @@
         <aside class="w-72 bg-slate-900 text-white flex flex-col p-5">
             <div class="mb-8">
                 <h1 class="text-2xl font-black text-indigo-400 tracking-tighter mb-1">AI 學習助手</h1>
-                <div class="flex items-center gap-2">
-                    <span class="bg-indigo-500/20 text-indigo-400 text-[10px] px-2 py-0.5 rounded-full font-bold">v1.5 Stable</span>
-                </div>
+                <span class="bg-indigo-500/20 text-indigo-400 text-[10px] px-2 py-0.5 rounded-full font-bold">v1.6 All-Subjects</span>
             </div>
 
             <div class="bg-slate-800/50 rounded-2xl p-4 border border-slate-700 mb-6">
-                <h3 class="text-xs font-bold text-slate-400 uppercase tracking-widest mb-3">版本更新內容</h3>
+                <h3 class="text-xs font-bold text-slate-400 uppercase mb-3">版本更新 v1.6</h3>
                 <ul class="text-[11px] space-y-2 text-slate-300">
-                    <li class="flex gap-2"><i class="fas fa-check-circle text-emerald-500"></i> 新增獨立模型選擇頁面</li>
-                    <li class="flex gap-2"><i class="fas fa-check-circle text-emerald-500"></i> 集成實時 API 連線性測試器</li>
-                    <li class="flex gap-2"><i class="fas fa-check-circle text-emerald-500"></i> 優化 MathJax 數學公式渲染</li>
-                    <li class="flex gap-2"><i class="fas fa-check-circle text-emerald-500"></i> 支援一鍵導出 PDF 學習筆記</li>
+                    <li class="flex gap-2"><i class="fas fa-redo text-indigo-400"></i> 恢復完整科目列表 (英/史/地/生)</li>
+                    <li class="flex gap-2"><i class="fas fa-arrows-alt-h text-indigo-400"></i> 新增頂部科目滑動導航</li>
+                    <li class="flex gap-2"><i class="fas fa-microchip text-indigo-400"></i> 模型診斷中心優化</li>
                 </ul>
             </div>
 
-            <nav class="space-y-2 flex-1">
-                <button onclick="openModelModal()" class="w-full bg-slate-800 hover:bg-slate-700 p-3 rounded-xl flex items-center justify-between transition-all group">
+            <nav class="space-y-3 flex-1">
+                <button onclick="openModelModal()" class="w-full bg-slate-800 hover:bg-slate-700 p-4 rounded-xl flex items-center justify-between group transition-all">
                     <div class="flex items-center gap-3">
-                        <i class="fas fa-microchip text-indigo-400"></i>
-                        <span class="text-sm">切換模型</span>
+                        <i class="fas fa-th-large text-indigo-400"></i>
+                        <span class="text-sm font-medium">模型廣場</span>
                     </div>
-                    <i class="fas fa-chevron-right text-[10px] text-slate-500 group-hover:translate-x-1 transition-transform"></i>
+                    <i class="fas fa-chevron-right text-[10px] text-slate-500"></i>
                 </button>
-                <div class="p-3 bg-slate-800/20 rounded-xl text-[11px] text-slate-500">
-                    當前模型: <span id="active-model-name" class="text-indigo-300 font-bold">載入中...</span>
+                <div class="p-3 bg-indigo-500/10 border border-indigo-500/20 rounded-xl">
+                    <div class="text-[10px] text-slate-500 font-bold uppercase mb-1">正在使用</div>
+                    <div id="active-model-name" class="text-xs text-indigo-300 font-bold italic">載入中...</div>
                 </div>
             </nav>
 
             <div class="pt-6 border-t border-slate-800">
-                <button onclick="exportToPDF()" class="w-full bg-emerald-600 hover:bg-emerald-700 py-3 rounded-xl text-sm font-bold transition-all shadow-lg shadow-emerald-900/20">
-                    <i class="fas fa-file-pdf mr-2"></i>導出 PDF 筆記
+                <button onclick="exportToPDF()" class="w-full bg-emerald-600 hover:bg-emerald-700 py-3 rounded-xl text-sm font-bold shadow-lg shadow-emerald-900/20 transition-all active:scale-95">
+                    <i class="fas fa-file-pdf mr-2"></i>導出學習筆記
                 </button>
             </div>
         </aside>
 
-        <main class="flex-1 flex flex-col bg-slate-50">
-            <header class="bg-white/80 backdrop-blur-md p-4 flex items-center justify-between border-b border-slate-200">
-                <div class="flex gap-3">
-                    <button onclick="setSubject('綜合')" class="sub-btn px-4 py-2 rounded-xl bg-indigo-600 text-white text-xs font-bold shadow-md shadow-indigo-100">綜合</button>
-                    <button onclick="setSubject('數學')" class="sub-btn px-4 py-2 rounded-xl text-slate-500 text-xs font-bold hover:bg-slate-100">數學</button>
-                    <button onclick="setSubject('科學')" class="sub-btn px-4 py-2 rounded-xl text-slate-500 text-xs font-bold hover:bg-slate-100">科學</button>
+        <main class="flex-1 flex flex-col bg-white">
+            <header class="bg-white/80 backdrop-blur-md p-4 border-b border-slate-100">
+                <div class="subject-scroll flex gap-2" id="subject-container">
+                    <button onclick="setSubject('綜合')" class="sub-btn px-5 py-2 rounded-full bg-indigo-600 text-white text-xs font-bold shadow-md">綜合</button>
+                    <button onclick="setSubject('數學')" class="sub-btn px-5 py-2 rounded-full text-slate-500 bg-slate-100 text-xs font-bold hover:bg-slate-200">數學</button>
+                    <button onclick="setSubject('英文')" class="sub-btn px-5 py-2 rounded-full text-slate-500 bg-slate-100 text-xs font-bold hover:bg-slate-200">英文</button>
+                    <button onclick="setSubject('科學')" class="sub-btn px-5 py-2 rounded-full text-slate-500 bg-slate-100 text-xs font-bold hover:bg-slate-200">科學</button>
+                    <button onclick="setSubject('歷史')" class="sub-btn px-5 py-2 rounded-full text-slate-500 bg-slate-100 text-xs font-bold hover:bg-slate-200">歷史</button>
+                    <button onclick="setSubject('地理')" class="sub-btn px-5 py-2 rounded-full text-slate-500 bg-slate-100 text-xs font-bold hover:bg-slate-200">地理</button>
+                    <button onclick="setSubject('生物')" class="sub-btn px-5 py-2 rounded-full text-slate-500 bg-slate-100 text-xs font-bold hover:bg-slate-200">生物</button>
                 </div>
             </header>
 
@@ -87,10 +90,10 @@
                 </div>
 
             <div class="p-4 bg-white border-t border-slate-100">
-                <div class="max-w-4xl mx-auto flex items-end gap-3 bg-slate-50 border border-slate-200 rounded-2xl p-2 shadow-inner">
-                    <textarea id="user-input" rows="1" placeholder="輸入學習問題..." class="flex-1 bg-transparent border-none focus:ring-0 text-sm py-3 px-4 resize-none"></textarea>
-                    <button id="send-btn" onclick="sendMessage()" class="bg-indigo-600 text-white w-12 h-12 rounded-xl hover:bg-indigo-700 flex items-center justify-center shadow-lg active:scale-95 transition-all">
-                        <i class="fas fa-arrow-up"></i>
+                <div class="max-w-4xl mx-auto flex items-end gap-3 bg-slate-50 border border-slate-200 rounded-3xl p-2 shadow-inner focus-within:border-indigo-300 transition-all">
+                    <textarea id="user-input" rows="1" placeholder="輸入問題..." class="flex-1 bg-transparent border-none focus:ring-0 text-sm py-3 px-4 resize-none"></textarea>
+                    <button id="send-btn" onclick="sendMessage()" class="bg-indigo-600 text-white w-12 h-12 rounded-2xl hover:bg-indigo-700 flex items-center justify-center shadow-lg active:scale-95 transition-all">
+                        <i class="fas fa-paper-plane"></i>
                     </button>
                 </div>
             </div>
@@ -98,118 +101,60 @@
     </div>
 
     <script>
+        // 配置資料與之前相同
         const CONFIG = {
-            qwen: { 
-                name: "阿里通義 Qwen",
-                key: 'sk-c5fcac1f9c804077af50a3d1217e92c2', 
-                url: 'https://dashscope.aliyuncs.com/compatible-mode/v1/chat/completions', 
-                model: 'qwen-plus',
-                icon: 'fa-cloud',
-                color: 'blue',
-                pros: "最穩定，支援 GitHub Pages 直接連線。",
-                cons: "高難度學術推導略遜於 GPT-4。"
-            },
-            deepseek: { 
-                name: "DeepSeek V3",
-                key: 'sk-6722fcd2a3b34d80bede9e71746d2dfc', 
-                url: 'https://api.deepseek.com/chat/completions', 
-                model: 'deepseek-chat',
-                icon: 'fa-brain',
-                color: 'indigo',
-                pros: "數學與邏輯推導能力極強。",
-                cons: "瀏覽器直接連線常因 CORS 失敗。"
-            },
-            poe: { 
-                name: "POE API",
-                key: 'zzOkQ4jDtpyVD9QqB2fuN9XRlIS1r_gijrXN6_gY1Zc', 
-                url: 'https://api.poe.com/v1/chat/completions', 
-                model: 'GPT-4o',
-                icon: 'fa-bolt',
-                color: 'purple',
-                pros: "集成最強模型，回答質量最高。",
-                cons: "需要特定的網路環境或後端代理。"
-            }
+            qwen: { name: "阿里 Qwen", key: 'sk-c5fcac1f9c804077af50a3d1217e92c2', url: 'https://dashscope.aliyuncs.com/compatible-mode/v1/chat/completions', model: 'qwen-plus', icon: 'fa-cloud', color: 'blue', pros: "最穩定，支援瀏覽器直連。", cons: "複雜學術推理略遜。" },
+            deepseek: { name: "DeepSeek V3", key: 'sk-6722fcd2a3b34d80bede9e71746d2dfc', url: 'https://api.deepseek.com/chat/completions', model: 'deepseek-chat', icon: 'fa-brain', color: 'indigo', pros: "數學與邏輯能力極強。", cons: "常被 CORS 攔截。" },
+            poe: { name: "POE API", key: 'zzOkQ4jDtpyVD9QqB2fuN9XRlIS1r_gijrXN6_gY1Zc', url: 'https://api.poe.com/v1/chat/completions', model: 'GPT-4o', icon: 'fa-bolt', color: 'purple', pros: "模型最強，回覆品質最高。", cons: "限制多，需 Proxy 代理。" }
         };
 
         let selectedModelId = 'qwen';
+        let currentSubject = '綜合';
         let chatHistory = [];
 
-        // 初始化：生成模型卡片
+        // 初始化卡片
         function initModelCards() {
             const container = document.getElementById('model-cards');
             container.innerHTML = '';
-            
             Object.keys(CONFIG).forEach(id => {
                 const m = CONFIG[id];
                 const card = document.createElement('div');
-                card.className = `border-2 ${selectedModelId === id ? 'border-indigo-500 bg-indigo-50/30' : 'border-slate-100'} rounded-3xl p-6 transition-all hover:shadow-xl relative flex flex-col`;
+                card.className = `border-2 ${selectedModelId === id ? 'border-indigo-500 bg-indigo-50/30' : 'border-slate-100'} rounded-3xl p-6 transition-all flex flex-col`;
                 card.innerHTML = `
                     <div class="flex items-center gap-4 mb-4">
-                        <div class="w-12 h-12 rounded-2xl bg-${m.color}-100 text-${m.color}-600 flex items-center justify-center text-xl">
-                            <i class="fas ${m.icon}"></i>
-                        </div>
-                        <div>
-                            <h3 class="font-bold text-slate-900">${m.name}</h3>
-                            <span class="text-[10px] text-slate-400 font-mono tracking-tighter">${m.model}</span>
-                        </div>
+                        <div class="w-12 h-12 rounded-2xl bg-${m.color}-100 text-${m.color}-600 flex items-center justify-center text-xl"><i class="fas ${m.icon}"></i></div>
+                        <div><h3 class="font-bold text-slate-900">${m.name}</h3><span class="text-[10px] text-slate-400 font-mono">${m.model}</span></div>
                     </div>
-                    <div class="flex-1 space-y-3 mb-6">
-                        <div class="text-xs"><b class="text-emerald-600">優點:</b> ${m.pros}</div>
-                        <div class="text-xs"><b class="text-rose-600">缺點:</b> ${m.cons}</div>
+                    <div class="flex-1 text-xs space-y-2 mb-6">
+                        <p><b class="text-emerald-600">優點:</b> ${m.pros}</p>
+                        <p><b class="text-rose-600">缺點:</b> ${m.cons}</p>
                     </div>
                     <div class="space-y-2">
-                        <button onclick="testModel('${id}', this)" class="w-full py-2 rounded-lg bg-slate-100 text-slate-600 text-xs font-bold hover:bg-slate-200 transition-all">
-                            <i class="fas fa-vial mr-1"></i> 測試連線
-                        </button>
-                        <button onclick="selectModel('${id}')" class="w-full py-2.5 rounded-lg ${selectedModelId === id ? 'bg-indigo-600 text-white' : 'bg-slate-900 text-white'} text-sm font-bold hover:opacity-90 transition-all">
-                            ${selectedModelId === id ? '當前使用中' : '選擇此模型'}
-                        </button>
-                    </div>
-                `;
+                        <button onclick="testModel('${id}', this)" class="w-full py-2 rounded-lg bg-slate-100 text-slate-600 text-xs font-bold hover:bg-slate-200">測試連線</button>
+                        <button onclick="selectModel('${id}')" class="w-full py-2.5 rounded-lg ${selectedModelId === id ? 'bg-indigo-600 text-white' : 'bg-slate-900 text-white'} text-sm font-bold">選擇此模型</button>
+                    </div>`;
                 container.appendChild(card);
             });
             document.getElementById('active-model-name').innerText = CONFIG[selectedModelId].name;
         }
 
+        function selectModel(id) { selectedModelId = id; initModelCards(); closeModelModal(); appendSystemMessage(`已切換至 ${CONFIG[id].name}`); }
+        function openModelModal() { document.getElementById('model-modal').classList.remove('hidden'); initModelCards(); }
+        function closeModelModal() { document.getElementById('model-modal').classList.add('hidden'); }
+
         async function testModel(id, btn) {
             const config = CONFIG[id];
-            const originalText = btn.innerHTML;
-            btn.innerHTML = '<i class="fas fa-spinner fa-spin"></i> 測試中...';
-            btn.disabled = true;
-
+            btn.innerHTML = '<i class="fas fa-spinner fa-spin"></i>';
             try {
                 const res = await fetch(config.url, {
                     method: 'POST',
                     headers: { 'Content-Type': 'application/json', 'Authorization': `Bearer ${config.key}` },
                     body: JSON.stringify({ model: config.model, messages: [{role: "user", content: "hi"}], max_tokens: 5 })
                 });
-                if (res.ok) {
-                    btn.innerHTML = '<i class="fas fa-check-circle text-emerald-500"></i> 連線成功';
-                    btn.classList.add('bg-emerald-50', 'text-emerald-700');
-                } else {
-                    throw new Error(res.status);
-                }
-            } catch (e) {
-                btn.innerHTML = `<i class="fas fa-times-circle text-rose-500"></i> 失敗 (${e.message})`;
-                btn.classList.add('bg-rose-50', 'text-rose-700');
-            } finally {
-                setTimeout(() => {
-                    btn.innerHTML = originalText;
-                    btn.classList.remove('bg-emerald-50', 'text-emerald-700', 'bg-rose-50', 'text-rose-700');
-                    btn.disabled = false;
-                }, 3000);
-            }
+                btn.innerHTML = res.ok ? '✅ 成功' : `❌ 失敗(${res.status})`;
+            } catch (e) { btn.innerHTML = '❌ 失敗'; }
+            setTimeout(() => btn.innerText = '測試連線', 2000);
         }
-
-        function selectModel(id) {
-            selectedModelId = id;
-            initModelCards();
-            closeModelModal();
-            appendSystemMessage(`已切換至 ${CONFIG[id].name}`);
-        }
-
-        function openModelModal() { document.getElementById('model-modal').classList.remove('hidden'); initModelCards(); }
-        function closeModelModal() { document.getElementById('model-modal').classList.add('hidden'); }
 
         async function sendMessage() {
             const input = document.getElementById('user-input');
@@ -218,7 +163,7 @@
             appendMessage('user', text);
             input.value = '';
             const config = CONFIG[selectedModelId];
-            chatHistory.push({ role: "user", content: text });
+            chatHistory.push({ role: "user", content: `作為一名${currentSubject}老師，請回答：${text}` });
             try {
                 const response = await fetch(config.url, {
                     method: 'POST',
@@ -229,9 +174,7 @@
                 const aiReply = data.choices[0].message.content;
                 appendMessage('ai', aiReply);
                 chatHistory.push({ role: "assistant", content: aiReply });
-            } catch (error) {
-                appendMessage('ai', "連線失敗，請嘗試在左側面板測試模型連線性或切換模型。");
-            }
+            } catch (error) { appendMessage('ai', "⚠️ 連線失敗。請嘗試在「模型廣場」測試連線性。"); }
         }
 
         function appendMessage(role, text) {
@@ -239,16 +182,24 @@
             const div = document.createElement('div');
             div.className = `flex items-start gap-4 ${role === 'user' ? 'flex-row-reverse' : ''}`;
             div.innerHTML = `
-                <div class="w-10 h-10 rounded-xl ${role === 'user' ? 'bg-slate-200' : 'bg-indigo-600 text-white'} flex items-center justify-center flex-shrink-0 text-sm">
-                    <i class="fas ${role === 'user' ? 'fa-user' : 'fa-robot'}"></i>
-                </div>
-                <div class="${role === 'user' ? 'bg-indigo-600 text-white' : 'bg-white border text-slate-700 shadow-sm'} px-5 py-3 rounded-2xl max-w-[80%] text-sm leading-relaxed">
-                    ${text}
-                </div>
-            `;
+                <div class="w-10 h-10 rounded-xl ${role === 'user' ? 'bg-slate-200' : 'bg-indigo-600 text-white'} flex items-center justify-center flex-shrink-0 text-sm"><i class="fas ${role === 'user' ? 'fa-user' : 'fa-robot'}"></i></div>
+                <div class="${role === 'user' ? 'bg-indigo-600 text-white' : 'bg-white border text-slate-700 shadow-sm'} px-5 py-3 rounded-2xl max-w-[80%] text-sm whitespace-pre-wrap">${text}</div>`;
             chatWindow.appendChild(div);
             chatWindow.scrollTop = chatWindow.scrollHeight;
             if (window.MathJax) window.MathJax.typesetPromise([div]);
+        }
+
+        function setSubject(sub) {
+            currentSubject = sub;
+            const buttons = document.querySelectorAll('.sub-btn');
+            buttons.forEach(btn => {
+                if(btn.innerText === sub) {
+                    btn.className = "sub-btn px-5 py-2 rounded-full bg-indigo-600 text-white text-xs font-bold shadow-md";
+                } else {
+                    btn.className = "sub-btn px-5 py-2 rounded-full text-slate-500 bg-slate-100 text-xs font-bold hover:bg-slate-200";
+                }
+            });
+            appendSystemMessage(`學科模式：${sub}`);
         }
 
         function appendSystemMessage(text) {
@@ -258,26 +209,11 @@
             document.getElementById('chat-window').appendChild(div);
         }
 
-        function setSubject(sub) {
-            const buttons = document.querySelectorAll('.sub-btn');
-            buttons.forEach(btn => {
-                if(btn.innerText === sub) {
-                    btn.className = "sub-btn px-4 py-2 rounded-xl bg-indigo-600 text-white text-xs font-bold shadow-md shadow-indigo-100";
-                } else {
-                    btn.className = "sub-btn px-4 py-2 rounded-xl text-slate-500 text-xs font-bold hover:bg-slate-100";
-                }
-            });
-            appendSystemMessage(`學科模式：${sub}`);
-        }
-
-        function exportToPDF() {
-            const element = document.getElementById('chat-window');
-            html2pdf().from(element).save(`AI筆記_${new Date().getTime()}.pdf`);
-        }
+        function exportToPDF() { html2pdf().from(document.getElementById('chat-window')).save(`AI學習筆記_${currentSubject}.pdf`); }
 
         window.onload = () => {
             initModelCards();
-            appendMessage('ai', "歡迎回來！我是你的 AI 學習助手。你可以點擊左側「切換模型」來測試並選擇最適合你的 AI 模型。");
+            appendMessage('ai', "歡迎回來！科目列表已全面恢復，你可以點擊上方切換科目，或點擊左側「模型廣場」切換 AI 引擎。");
         };
     </script>
 </body>
