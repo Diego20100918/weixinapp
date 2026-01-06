@@ -3,7 +3,7 @@
 <head>
     <meta charset="UTF-8">
     <meta name="viewport" content="width=device-width, initial-scale=1.0">
-    <title>AI 學習助手 - MEGA 2.0</title>
+    <title>AI 學習助手</title>
     <script src="https://cdn.tailwindcss.com"></script>
     <link href="https://cdnjs.cloudflare.com/ajax/libs/font-awesome/6.0.0/css/all.min.css" rel="stylesheet">
     <script src="https://cdnjs.cloudflare.com/ajax/libs/html2pdf.js/0.10.1/html2pdf.bundle.min.js"></script>
@@ -12,219 +12,188 @@
     </script>
     <script id="MathJax-script" async src="https://cdn.jsdelivr.net/npm/mathjax@3/es5/tex-mml-chtml.js"></script>
     <style>
-        @keyframes flow { 0% { background-position: 0% 50%; } 50% { background-position: 100% 50%; } 100% { background-position: 0% 50%; } }
-        .animate-flow { background: linear-gradient(-45deg, #6366f1, #a855f7, #ec4899, #3b82f6); background-size: 400% 400%; animation: flow 10s ease infinite; }
-        .glass { background: rgba(255, 255, 255, 0.05); backdrop-filter: blur(12px); border: 1px solid rgba(255, 255, 255, 0.1); }
-        .chat-container { height: calc(100vh - 180px); }
-        .custom-scrollbar::-webkit-scrollbar { width: 4px; }
-        .custom-scrollbar::-webkit-scrollbar-thumb { background: #6366f1; border-radius: 10px; }
-        .recording { animation: ping 1s cubic-bezier(0, 0, 0.2, 1) infinite; color: #f43f5e !important; }
-        .modal-bg { background-color: rgba(0, 0, 0, 0.85); backdrop-filter: blur(20px); }
+        /* 極致毛玻璃效果 */
+        .glass-panel { 
+            background: rgba(30, 41, 59, 0.7); 
+            backdrop-filter: blur(20px) saturate(180%); 
+            border: 1px solid rgba(255, 255, 255, 0.1); 
+        }
+        .glass-card { 
+            background: rgba(255, 255, 255, 0.03); 
+            backdrop-filter: blur(10px); 
+            border: 1px solid rgba(255, 255, 255, 0.05); 
+            transition: all 0.3s ease;
+        }
+        .glass-card:hover { 
+            background: rgba(255, 255, 255, 0.08); 
+            border-color: rgba(99, 102, 241, 0.5);
+            transform: translateY(-5px);
+        }
+        
+        /* 動態流光邊框效果 */
+        @keyframes border-flow {
+            0% { border-color: #6366f1; box-shadow: 0 0 5px #6366f1; }
+            50% { border-color: #ec4899; box-shadow: 0 0 20px #ec4899; }
+            100% { border-color: #6366f1; box-shadow: 0 0 5px #6366f1; }
+        }
+        .neon-border { border: 2px solid; animation: border-flow 4s infinite; }
+        
+        .chat-container { height: calc(100vh - 200px); }
+        .custom-scrollbar::-webkit-scrollbar { width: 5px; }
+        .custom-scrollbar::-webkit-scrollbar-thumb { background: linear-gradient(#6366f1, #ec4899); border-radius: 10px; }
+        .recording { animation: pulse 1s infinite; color: #f43f5e !important; }
+        @keyframes pulse { 0%, 100% { opacity: 1; transform: scale(1); } 50% { opacity: 0.5; transform: scale(1.2); } }
+        
+        .no-scrollbar::-webkit-scrollbar { display: none; }
     </style>
 </head>
-<body class="bg-[#0f172a] font-sans text-slate-200">
+<body class="bg-[#020617] font-sans text-slate-200 overflow-hidden">
 
-    <div id="launch-screen" class="fixed inset-0 z-[100] animate-flow flex items-center justify-center p-6 transition-all duration-1000">
-        <div class="max-w-4xl w-full glass rounded-[3rem] p-10 md:p-16 text-center shadow-2xl relative overflow-hidden">
-            <div class="absolute -top-24 -left-24 w-64 h-64 bg-indigo-500/30 rounded-full blur-[80px]"></div>
-            <div class="absolute -bottom-24 -right-24 w-64 h-64 bg-pink-500/30 rounded-full blur-[80px]"></div>
-            
-            <span class="inline-block px-4 py-1 rounded-full bg-white/10 text-white text-xs font-black uppercase tracking-[0.3em] mb-6 border border-white/20">Major Update</span>
-            <h1 class="text-6xl md:text-8xl font-black text-white mb-6 tracking-tighter">MEGA <span class="text-transparent bg-clip-text bg-gradient-to-r from-yellow-300 to-orange-400">2.0</span></h1>
-            <p class="text-xl md:text-2xl text-white/80 font-light mb-12 leading-relaxed">這不只是一個版本更新。這是一場<br><span class="font-bold text-white">智慧、交互與生產力的全面革命。</span></p>
-            
-            <div class="grid grid-cols-1 md:grid-cols-3 gap-6 mb-12">
-                <div class="p-6 rounded-3xl bg-white/5 hover:bg-white/10 transition-all">
-                    <i class="fas fa-brain text-3xl text-indigo-400 mb-4"></i>
-                    <h3 class="text-white font-bold mb-2">多模態模型廣場</h3>
-                    <p class="text-white/50 text-xs text-left">獨立分頁、實時診斷，完美掌控 Qwen, DeepSeek 與 POE 的核心力量。</p>
+    <div id="info-modal" class="fixed inset-0 z-[120] bg-black/90 backdrop-blur-xl hidden flex items-center justify-center p-4">
+        <div class="glass-panel w-full max-w-3xl rounded-[2.5rem] p-10 max-h-[85vh] overflow-y-auto custom-scrollbar shadow-2xl">
+            <div class="flex justify-between items-center mb-10 border-b border-white/10 pb-6">
+                <div>
+                    <h2 class="text-4xl font-black text-white italic tracking-tighter">SYSTEM ARCHIVE</h2>
+                    <p class="text-indigo-400 text-xs font-bold uppercase tracking-[0.3em] mt-2">版本演進全記錄</p>
                 </div>
-                <div class="p-6 rounded-3xl bg-white/5 hover:bg-white/10 transition-all border border-indigo-500/30 shadow-lg shadow-indigo-500/10">
-                    <i class="fas fa-microphone-alt text-3xl text-pink-400 mb-4"></i>
-                    <h3 class="text-white font-bold mb-2">全平台語音識別</h3>
-                    <p class="text-white/50 text-xs text-left">深度適配 Safari 與 iOS，讓你的聲音成為開啟知識之門的唯一鑰匙。</p>
+                <button onclick="toggleInfo(false)" class="text-slate-500 hover:text-white transition-colors"><i class="fas fa-times text-2xl"></i></button>
+            </div>
+            
+            <div class="space-y-12">
+                <div class="relative pl-8 border-l-2 border-indigo-500">
+                    <div class="absolute -left-[9px] top-0 w-4 h-4 rounded-full bg-indigo-500 shadow-[0_0_15px_#6366f1]"></div>
+                    <h3 class="text-xl font-bold text-white mb-2">v3.0 PHANTOM (當前版本)</h3>
+                    <p class="text-slate-400 text-sm leading-relaxed mb-4">全面視覺重構，導入 Ultra-Glassmorphism 設計語言。強化系統診斷與連線測試模組，實現學術級數據導出。</p>
+                    <div class="flex gap-2 flex-wrap">
+                        <span class="bg-indigo-500/20 text-indigo-300 text-[10px] px-2 py-1 rounded-md border border-indigo-500/30">視覺革命</span>
+                        <span class="bg-pink-500/20 text-pink-300 text-[10px] px-2 py-1 rounded-md border border-pink-500/30">穩定連線</span>
+                    </div>
                 </div>
-                <div class="p-6 rounded-3xl bg-white/5 hover:bg-white/10 transition-all">
-                    <i class="fas fa-database text-3xl text-blue-400 mb-4"></i>
-                    <h3 class="text-white font-bold mb-2">知識持久化引擎</h3>
-                    <p class="text-white/50 text-xs text-left">LocalStorage 雲端感官儲存，每一次對話都將成為你永恆的學術資產。</p>
+
+                <div class="relative pl-8 border-l-2 border-slate-700">
+                    <div class="absolute -left-[9px] top-0 w-4 h-4 rounded-full bg-slate-700"></div>
+                    <h3 class="text-xl font-bold text-slate-300 mb-2">v2.0 MEGA REVOLUTION</h3>
+                    <p class="text-slate-500 text-sm leading-relaxed mb-4">功能大爆發。加入全學科導航、語音辨識、文件分析功能。首次引入 LocalStorage 記憶引擎，實現離線數據留存。</p>
+                </div>
+
+                <div class="relative pl-8 border-l-2 border-slate-800">
+                    <div class="absolute -left-[9px] top-0 w-4 h-4 rounded-full bg-slate-800"></div>
+                    <h3 class="text-xl font-bold text-slate-600 mb-2">v1.0 ORIGIN</h3>
+                    <p class="text-slate-600 text-sm leading-relaxed mb-4">原型建立。初步實現 DeepSeek 與 Qwen API 的對接，奠定基礎聊天框架與 MathJax 公式渲染邏輯。</p>
                 </div>
             </div>
-
-            <button onclick="enterApp()" class="bg-white text-indigo-900 px-12 py-5 rounded-full text-xl font-black hover:scale-105 transition-all shadow-xl active:scale-95">
-                立即啟動革命 <i class="fas fa-bolt ml-2"></i>
-            </button>
+            
+            <button onclick="toggleInfo(false)" class="w-full mt-12 bg-white text-black py-4 rounded-2xl font-black uppercase tracking-widest hover:bg-indigo-500 hover:text-white transition-all">CLOSE ARCHIVE</button>
         </div>
     </div>
 
-    <div id="issues-modal" class="fixed inset-0 z-[110] modal-bg hidden flex items-center justify-center p-4">
-        <div class="bg-[#1e293b] w-full max-w-2xl rounded-[2rem] p-8 border border-slate-700 shadow-2xl">
-            <div class="flex justify-between items-center mb-6">
-                <h2 class="text-2xl font-bold"><i class="fas fa-info-circle mr-3 text-indigo-400"></i>系統限制與兼容性說明</h2>
-                <button onclick="toggleIssues(false)" class="text-slate-500 hover:text-white"><i class="fas fa-times text-xl"></i></button>
-            </div>
-            <div class="space-y-4 overflow-y-auto max-h-[60vh] pr-2 custom-scrollbar text-sm">
-                <div class="bg-slate-800 p-4 rounded-xl border-l-4 border-emerald-500">
-                    <h4 class="font-bold text-emerald-400">語音輸入 (Voice Recognition)</h4>
-                    <p class="text-slate-400 mt-1">目前適配 Chrome/Edge。Safari 已於 2.0 版本加入兼容性代碼，若無反應請手動點擊「允許麥克風」。</p>
-                </div>
-                <div class="bg-slate-800 p-4 rounded-xl border-l-4 border-yellow-500">
-                    <h4 class="font-bold text-yellow-400">POE / DeepSeek API</h4>
-                    <p class="text-slate-400 mt-1">部分環境會觸發 CORS 跨域限制。如果測試失敗，這並非代碼錯誤，而是 API 供應商的安全限制。</p>
-                </div>
-                <div class="bg-slate-800 p-4 rounded-xl border-l-4 border-blue-500">
-                    <h4 class="font-bold text-blue-400">PDF 導出 (PDF Export)</h4>
-                    <p class="text-slate-400 mt-1">導出大型對話時可能會有約 2 秒延遲。若 MathJax 公式過多，請確保它們已渲染完成再點擊。 </p>
-                </div>
-            </div>
-            <button onclick="toggleIssues(false)" class="w-full mt-8 bg-slate-700 py-3 rounded-xl font-bold">了解並返回</button>
-        </div>
-    </div>
-
-    <div id="model-modal" class="fixed inset-0 z-[90] modal-bg hidden flex items-center justify-center p-4">
-        <div class="bg-[#1e293b] rounded-[3rem] w-full max-w-5xl max-h-[90vh] overflow-y-auto p-10 border border-slate-700">
-            <div class="flex justify-between items-center mb-10">
-                <h2 class="text-4xl font-black italic">MODEL ARENA</h2>
-                <button onclick="closeModelModal()" class="text-slate-400 hover:text-white"><i class="fas fa-times text-2xl"></i></button>
+    <div id="model-modal" class="fixed inset-0 z-[100] bg-black/95 backdrop-blur-2xl hidden flex items-center justify-center p-4">
+        <div class="glass-panel rounded-[3rem] w-full max-w-6xl max-h-[90vh] overflow-y-auto p-12">
+            <div class="flex justify-between items-center mb-12">
+                <h2 class="text-5xl font-black text-transparent bg-clip-text bg-gradient-to-r from-indigo-400 to-pink-500 italic">MODEL ARENA</h2>
+                <button onclick="closeModelModal()" class="text-slate-500 hover:text-white transition-colors"><i class="fas fa-times text-2xl"></i></button>
             </div>
             <div class="grid md:grid-cols-3 gap-8" id="model-cards"></div>
         </div>
     </div>
 
-    <div class="flex h-screen overflow-hidden">
-        <aside class="w-80 bg-[#0a0f1d] flex flex-col p-6 border-r border-slate-800">
-            <div class="mb-10">
-                <h1 class="text-2xl font-black text-white tracking-tighter">MEGA <span class="text-indigo-500">ASSISTANT</span></h1>
-                <div class="flex items-center gap-2 mt-2">
-                    <span class="bg-emerald-500/10 text-emerald-400 text-[10px] px-2 py-0.5 rounded-full font-black border border-emerald-500/20">SYSTEM ACTIVE</span>
-                    <span class="text-slate-600 text-[10px] font-bold">v2.0.1</span>
+    <div class="flex h-screen">
+        <aside class="w-80 glass-panel flex flex-col p-8 border-r border-white/5">
+            <div class="mb-12">
+                <div class="flex items-center gap-3 mb-2">
+                    <div class="w-3 h-3 rounded-full bg-emerald-500 animate-pulse"></div>
+                    <h1 class="text-2xl font-black text-white tracking-tighter uppercase">AI 學習助手</h1>
+                </div>
+                <div class="px-3 py-1 bg-indigo-500/10 border border-indigo-500/30 rounded-lg inline-block">
+                    <span class="text-[10px] text-indigo-400 font-black tracking-[0.2em]">V3.0 PHANTOM</span>
                 </div>
             </div>
 
-            <nav class="flex-1 space-y-3">
-                <button onclick="openModelModal()" class="w-full bg-[#1e293b] hover:bg-indigo-600 p-4 rounded-[1.5rem] flex items-center justify-between transition-all group shadow-lg">
-                    <span class="text-sm font-bold"><i class="fas fa-layer-group mr-2"></i> 模型選單</span>
-                    <i class="fas fa-chevron-right text-[10px] opacity-50 group-hover:translate-x-1 transition-transform"></i>
+            <nav class="flex-1 space-y-4">
+                <button onclick="openModelModal()" class="w-full glass-card p-5 rounded-2xl flex items-center justify-between group">
+                    <span class="text-sm font-bold text-slate-300"><i class="fas fa-microchip mr-3 text-indigo-500"></i> 模型矩陣</span>
+                    <i class="fas fa-arrow-right text-[10px] opacity-30 group-hover:translate-x-2 transition-transform"></i>
                 </button>
-                <button onclick="toggleIssues(true)" class="w-full bg-slate-800/40 hover:bg-slate-700 p-4 rounded-[1.5rem] flex items-center justify-between text-slate-400">
-                    <span class="text-sm font-bold"><i class="fas fa-cog mr-2"></i> 兼容性與說明 (更多)</span>
-                    <i class="fas fa-question-circle text-xs"></i>
+                <button onclick="toggleInfo(true)" class="w-full glass-card p-5 rounded-2xl flex items-center justify-between group">
+                    <span class="text-sm font-bold text-slate-300"><i class="fas fa-history mr-3 text-pink-500"></i> 歷史版本日誌</span>
+                    <i class="fas fa-plus text-[10px] opacity-30 group-hover:rotate-90 transition-transform"></i>
                 </button>
             </nav>
 
-            <div class="pt-6 space-y-3">
-                <button onclick="exportToPDF()" class="w-full bg-gradient-to-r from-emerald-500 to-teal-600 py-4 rounded-2xl text-sm font-black text-white shadow-xl shadow-emerald-500/10 transition-all hover:scale-105 active:scale-95">
-                    <i class="fas fa-download mr-2"></i> 導出學術筆記
+            <div class="mt-auto space-y-4 pt-8 border-t border-white/5">
+                <button onclick="exportToPDF()" class="w-full neon-border py-4 rounded-2xl text-xs font-black uppercase tracking-widest text-white transition-all active:scale-95">
+                    導出 PDF 數據
                 </button>
-                <button onclick="clearHistory()" class="w-full text-[10px] text-slate-600 font-bold hover:text-rose-400 uppercase tracking-widest transition-colors">
-                    重置系統核心 (清除紀錄)
+                <button onclick="clearHistory()" class="w-full text-[10px] text-slate-600 font-bold hover:text-rose-500 transition-colors uppercase tracking-[0.3em]">
+                    核心重置
                 </button>
             </div>
         </aside>
 
-        <main class="flex-1 flex flex-col bg-[#0f172a]">
-            <header class="p-4 border-b border-slate-800 flex items-center bg-[#0a0f1d]/50 backdrop-blur-xl">
-                <div class="flex gap-2 overflow-x-auto pb-1 no-scrollbar w-full" id="subject-scroll">
-                    <button onclick="setSubject('綜合')" class="sub-btn px-6 py-2 rounded-full bg-indigo-600 text-white text-[11px] font-black shadow-lg">綜合</button>
-                    <button onclick="setSubject('數學')" class="sub-btn px-6 py-2 rounded-full bg-slate-800 text-slate-400 text-[11px] font-black">數學</button>
-                    <button onclick="setSubject('英文')" class="sub-btn px-6 py-2 rounded-full bg-slate-800 text-slate-400 text-[11px] font-black">英文</button>
-                    <button onclick="setSubject('科學')" class="sub-btn px-6 py-2 rounded-full bg-slate-800 text-slate-400 text-[11px] font-black">科學</button>
-                    <button onclick="setSubject('歷史')" class="sub-btn px-6 py-2 rounded-full bg-slate-800 text-slate-400 text-[11px] font-black">歷史</button>
+        <main class="flex-1 flex flex-col relative overflow-hidden">
+            <div class="absolute -top-40 -right-40 w-96 h-96 bg-indigo-600/10 rounded-full blur-[120px]"></div>
+            <div class="absolute -bottom-40 -left-40 w-96 h-96 bg-pink-600/10 rounded-full blur-[120px]"></div>
+
+            <header class="p-6 border-b border-white/5 bg-black/20 backdrop-blur-md">
+                <div class="flex gap-3 overflow-x-auto no-scrollbar w-full" id="subject-scroll">
+                    <button onclick="setSubject('綜合')" class="sub-btn px-6 py-2 rounded-xl bg-indigo-600 text-white text-[11px] font-black shadow-lg shadow-indigo-500/20">綜合</button>
+                    <button onclick="setSubject('數學')" class="sub-btn px-6 py-2 rounded-xl bg-white/5 text-slate-400 text-[11px] font-black hover:bg-white/10 transition-all">數學</button>
+                    <button onclick="setSubject('英文')" class="sub-btn px-6 py-2 rounded-xl bg-white/5 text-slate-400 text-[11px] font-black hover:bg-white/10 transition-all">英文</button>
+                    <button onclick="setSubject('科學')" class="sub-btn px-6 py-2 rounded-xl bg-white/5 text-slate-400 text-[11px] font-black hover:bg-white/10 transition-all">科學</button>
+                    <button onclick="setSubject('歷史')" class="sub-btn px-6 py-2 rounded-xl bg-white/5 text-slate-400 text-[11px] font-black hover:bg-white/10 transition-all">歷史</button>
                 </div>
             </header>
 
-            <div id="chat-window" class="chat-container overflow-y-auto p-6 space-y-8 custom-scrollbar"></div>
+            <div id="chat-window" class="chat-container overflow-y-auto p-8 space-y-10 custom-scrollbar relative z-10">
+                </div>
 
-            <div class="p-6 bg-[#0a0f1d]/50 backdrop-blur-xl border-t border-slate-800">
-                <div class="max-w-4xl mx-auto relative group">
-                    <div class="absolute -inset-1 bg-gradient-to-r from-indigo-500 to-purple-600 rounded-[2rem] blur opacity-25 group-focus-within:opacity-50 transition duration-1000"></div>
-                    <div class="relative flex items-end gap-2 bg-[#1e293b] border border-slate-700 rounded-[1.8rem] p-2 pr-4 transition-all focus-within:border-indigo-500 shadow-2xl">
-                        <button onclick="document.getElementById('file-input').click()" class="p-4 text-slate-400 hover:text-indigo-400"><i class="fas fa-paperclip"></i></button>
-                        <input type="file" id="file-input" class="hidden" onchange="handleFile(event)">
-                        
-                        <textarea id="user-input" rows="1" placeholder="問你所想..." class="flex-1 bg-transparent border-none focus:ring-0 text-sm py-4 px-2 text-white resize-none"></textarea>
-                        
-                        <button id="voice-btn" onclick="toggleVoice()" class="p-4 text-slate-400 hover:text-rose-400 transition-all"><i class="fas fa-microphone" id="mic-icon"></i></button>
-                        <button id="send-btn" onclick="sendMessage()" class="bg-indigo-600 text-white w-12 h-12 rounded-2xl hover:bg-indigo-500 shadow-lg flex items-center justify-center transition-all active:scale-90">
-                            <i class="fas fa-arrow-up"></i>
-                        </button>
-                    </div>
+            <div class="p-8 relative z-20">
+                <div class="max-w-5xl mx-auto glass-panel p-2 rounded-[2.5rem] shadow-2xl flex items-end gap-2 focus-within:ring-2 ring-indigo-500/50 transition-all">
+                    <button onclick="document.getElementById('file-input').click()" class="p-4 text-slate-500 hover:text-indigo-400 transition-colors"><i class="fas fa-paperclip text-lg"></i></button>
+                    <input type="file" id="file-input" class="hidden" onchange="handleFile(event)">
+                    
+                    <textarea id="user-input" rows="1" placeholder="輸入學術請求..." class="flex-1 bg-transparent border-none focus:ring-0 text-sm py-4 px-2 text-white resize-none"></textarea>
+                    
+                    <button id="voice-btn" onclick="toggleVoice()" class="p-4 text-slate-500 hover:text-rose-400 transition-all"><i class="fas fa-microphone text-lg" id="mic-icon"></i></button>
+                    <button id="send-btn" onclick="sendMessage()" class="bg-white text-black w-14 h-14 rounded-[1.5rem] hover:bg-indigo-500 hover:text-white transition-all shadow-xl flex items-center justify-center active:scale-90">
+                        <i class="fas fa-paper-plane text-xl"></i>
+                    </button>
                 </div>
             </div>
         </main>
     </div>
 
     <script>
-        // 核心配置 (API 資訊)
         const CONFIG = {
-            qwen: { name: "阿里 Qwen-Plus", key: 'sk-c5fcac1f9c804077af50a3d1217e92c2', url: 'https://dashscope.aliyuncs.com/compatible-mode/v1/chat/completions', model: 'qwen-plus', icon: 'fa-cloud', color: 'indigo', pros: "高穩定性，GitHub Pages 首選。", cons: "長文本推理偶爾偏簡略。" },
-            deepseek: { name: "DeepSeek V3", key: 'sk-6722fcd2a3b34d80bede9e71746d2dfc', url: 'https://api.deepseek.com/chat/completions', model: 'deepseek-chat', icon: 'fa-brain', color: 'pink', pros: "數學推理能力目前業界最強。", cons: "瀏覽器 CORS 限制極大。" },
-            poe: { name: "POE GPT-4o", key: 'zzOkQ4jDtpyVD9QqB2fuN9XRlIS1r_gijrXN6_gY1Zc', url: 'https://api.poe.com/v1/chat/completions', model: 'GPT-4o', icon: 'fa-bolt', color: 'yellow', pros: "集成 GPT-4o，學術回覆第一。", cons: "安全性高，常駐跨域限制。" }
+            qwen: { name: "Qwen Phantom", key: 'sk-c5fcac1f9c804077af50a3d1217e92c2', url: 'https://dashscope.aliyuncs.com/compatible-mode/v1/chat/completions', model: 'qwen-plus', icon: 'fa-cloud', color: 'indigo', pros: "高連線穩定度，適合即時互動。", cons: "深度推理細節稍顯簡略。" },
+            deepseek: { name: "DeepSeek V3", key: 'sk-6722fcd2a3b34d80bede9e71746d2dfc', url: 'https://api.deepseek.com/chat/completions', model: 'deepseek-chat', icon: 'fa-brain', color: 'pink', pros: "頂尖數學與邏輯建模能力。", cons: "CORS 攔截風險較高。" },
+            poe: { name: "POE GPT-4o", key: 'zzOkQ4jDtpyVD9QqB2fuN9XRlIS1r_gijrXN6_gY1Zc', url: 'https://api.poe.com/v1/chat/completions', model: 'GPT-4o', icon: 'fa-bolt', color: 'yellow', pros: "最強大模態模型，語意理解完美。", cons: "環境限制最為嚴苛。" }
         };
 
         let selectedModel = 'qwen';
         let currentSubject = '綜合';
-        let chatHistory = JSON.parse(localStorage.getItem('mega_v2_history')) || [];
+        let chatHistory = JSON.parse(localStorage.getItem('phantom_history')) || [];
 
-        // 啟動功能
-        function enterApp() {
-            document.getElementById('launch-screen').classList.add('opacity-0', 'pointer-events-none', 'scale-110');
-            setTimeout(() => document.getElementById('launch-screen').remove(), 1000);
-        }
-
-        function toggleIssues(show) {
-            const modal = document.getElementById('issues-modal');
-            show ? modal.classList.remove('hidden') : modal.classList.add('hidden');
-        }
-
-        // --- Safari 語音輸入優化 (v2.0 Fix) ---
-        const SpeechRecognition = window.SpeechRecognition || window.webkitSpeechRecognition;
-        let recognition = null;
-        if (SpeechRecognition) {
-            recognition = new SpeechRecognition();
-            recognition.lang = 'zh-HK';
-            recognition.continuous = false; // Safari 建議設為 false 以提高穩定性
-            recognition.interimResults = false;
-            
-            recognition.onresult = (e) => {
-                const text = e.results[0][0].transcript;
-                document.getElementById('user-input').value += text;
-                toggleVoiceUI(false);
-            };
-            recognition.onend = () => toggleVoiceUI(false);
-            recognition.onerror = (e) => { console.error("Speech Err:", e.error); toggleVoiceUI(false); };
-        }
-
-        function toggleVoice() {
-            if (!recognition) return alert("閣下的瀏覽器不支援 Web Speech API。");
-            toggleVoiceUI(true);
-            try { recognition.start(); } catch(e) { recognition.stop(); }
-        }
-
-        function toggleVoiceUI(isRec) {
-            const icon = document.getElementById('mic-icon');
-            isRec ? icon.classList.add('recording') : icon.classList.remove('recording');
-        }
-
-        // --- 核心聊天與模型邏輯 ---
+        // 功能：切換 Model 選單
         function initModelCards() {
             const container = document.getElementById('model-cards');
             container.innerHTML = '';
             Object.keys(CONFIG).forEach(id => {
                 const m = CONFIG[id];
                 const card = document.createElement('div');
-                card.className = `p-8 rounded-[2.5rem] border-2 transition-all flex flex-col ${selectedModel === id ? 'border-indigo-500 bg-indigo-500/10' : 'border-slate-800 bg-slate-800/20'}`;
+                card.className = `glass-card p-8 rounded-[2.5rem] flex flex-col ${selectedModel === id ? 'ring-2 ring-indigo-500' : ''}`;
                 card.innerHTML = `
-                    <div class="w-16 h-16 rounded-2xl bg-${m.color}-500/20 text-${m.color}-400 flex items-center justify-center text-2xl mb-6 shadow-inner"><i class="fas ${m.icon}"></i></div>
-                    <h3 class="text-xl font-black mb-1">${m.name}</h3>
-                    <p class="text-[10px] text-slate-500 font-mono mb-6">${m.model}</p>
-                    <div class="flex-1 space-y-3 mb-8 text-xs leading-relaxed">
-                        <p><b class="text-emerald-500 uppercase tracking-tighter">Pros:</b> ${m.pros}</p>
-                        <p><b class="text-rose-500 uppercase tracking-tighter">Cons:</b> ${m.cons}</p>
+                    <div class="flex items-center gap-5 mb-8">
+                        <div class="w-14 h-14 rounded-2xl bg-${m.color}-500/20 text-${m.color}-400 flex items-center justify-center text-2xl shadow-inner"><i class="fas ${m.icon}"></i></div>
+                        <div><h3 class="text-xl font-black">${m.name}</h3><span class="text-[9px] text-slate-500 font-mono">${m.model}</span></div>
                     </div>
-                    <div class="space-y-3">
-                        <button onclick="testModel('${id}', this)" class="w-full py-3 bg-white/5 rounded-xl text-[10px] font-black uppercase tracking-widest hover:bg-white/10">Test Ping</button>
-                        <button onclick="selectModel('${id}')" class="w-full py-4 ${selectedModel === id ? 'bg-indigo-600 shadow-indigo-500/20' : 'bg-slate-700'} text-white rounded-xl text-sm font-black shadow-lg">Activate</button>
+                    <div class="flex-1 text-xs space-y-3 mb-10 leading-relaxed text-slate-400">
+                        <p><b class="text-white uppercase">Strength:</b> ${m.pros}</p>
+                        <p><b class="text-white uppercase">Warning:</b> ${m.cons}</p>
+                    </div>
+                    <div class="space-y-4">
+                        <button onclick="testModel('${id}', this)" class="w-full py-3 bg-white/5 rounded-xl text-[10px] font-black uppercase tracking-widest hover:bg-indigo-500 transition-colors">Connect Test</button>
+                        <button onclick="selectModel('${id}')" class="w-full py-4 ${selectedModel === id ? 'bg-indigo-600' : 'bg-slate-700'} text-white rounded-xl text-sm font-black shadow-lg">Activate</button>
                     </div>`;
                 container.appendChild(card);
             });
@@ -232,33 +201,40 @@
 
         async function testModel(id, btn) {
             const config = CONFIG[id];
-            btn.innerHTML = '<i class="fas fa-circle-notch fa-spin"></i>';
+            btn.innerHTML = '<i class="fas fa-spinner fa-spin"></i>';
             try {
-                const res = await fetch(config.url, {
-                    method: 'POST',
-                    headers: { 'Content-Type': 'application/json', 'Authorization': `Bearer ${config.key}` },
-                    body: JSON.stringify({ model: config.model, messages: [{role:"user",content:"hi"}], max_tokens: 5 })
-                });
-                btn.innerHTML = res.ok ? '<span class="text-emerald-400">PASSED</span>' : `<span class="text-rose-400">FAIL (${res.status})</span>`;
-            } catch { btn.innerHTML = '<span class="text-rose-400">CORS ERROR</span>'; }
-            setTimeout(() => btn.innerText = 'Test Ping', 3000);
+                const res = await fetch(config.url, { method: 'POST', headers: { 'Content-Type': 'application/json', 'Authorization': `Bearer ${config.key}` }, body: JSON.stringify({ model: config.model, messages: [{role:"user",content:"hi"}], max_tokens: 5 }) });
+                btn.innerHTML = res.ok ? '<span class="text-emerald-400">SUCCESS</span>' : `<span class="text-rose-400">ERROR ${res.status}</span>`;
+            } catch { btn.innerHTML = '<span class="text-rose-400">CORS BLOCKED</span>'; }
+            setTimeout(() => btn.innerText = 'Connect Test', 3000);
         }
 
-        function selectModel(id) { selectedModel = id; initModelCards(); closeModelModal(); appendSystemMessage(`Core Engine: ${CONFIG[id].name}`); }
+        function selectModel(id) { selectedModel = id; initModelCards(); closeModelModal(); appendSystemMessage(`Engine Switched: ${CONFIG[id].name}`); }
         function openModelModal() { document.getElementById('model-modal').classList.remove('hidden'); initModelCards(); }
         function closeModelModal() { document.getElementById('model-modal').classList.add('hidden'); }
+        function toggleInfo(show) { document.getElementById('info-modal').classList.toggle('hidden', !show); }
 
+        // --- Safari & All Voice Fix ---
+        const SpeechRecognition = window.SpeechRecognition || window.webkitSpeechRecognition;
+        let recognition = null;
+        if (SpeechRecognition) {
+            recognition = new SpeechRecognition();
+            recognition.lang = 'zh-HK';
+            recognition.onresult = (e) => { document.getElementById('user-input').value += e.results[0][0].transcript; toggleVoiceUI(false); };
+            recognition.onend = () => toggleVoiceUI(false);
+        }
+        function toggleVoice() { if (!recognition) return alert("Browser Unsupported."); toggleVoiceUI(true); try { recognition.start(); } catch(e) { recognition.stop(); } }
+        function toggleVoiceUI(isRec) { document.getElementById('mic-icon').classList.toggle('recording', isRec); }
+
+        // --- 核心聊天邏輯 ---
         async function sendMessage() {
             const input = document.getElementById('user-input');
             const text = input.value.trim();
             if (!text) return;
-
             appendMessage('user', text);
             input.value = '';
-            
-            chatHistory.push({ role: "user", content: `(科目: ${currentSubject}) ${text}` });
+            chatHistory.push({ role: "user", content: `(Subject: ${currentSubject}) ${text}` });
             saveHistory();
-
             try {
                 const config = CONFIG[selectedModel];
                 const res = await fetch(config.url, {
@@ -271,58 +247,47 @@
                 appendMessage('ai', aiReply);
                 chatHistory.push({ role: "assistant", content: aiReply });
                 saveHistory();
-            } catch {
-                appendMessage('ai', "連線中斷。請在「模型選單」中執行 Ping 測試以排查故障。");
-            }
+            } catch { appendMessage('ai', "Signal Interrupted. Please perform a Connection Test in the Model Arena."); }
         }
 
         function appendMessage(role, text) {
             const win = document.getElementById('chat-window');
             const div = document.createElement('div');
-            div.className = `flex items-start gap-4 ${role === 'user' ? 'flex-row-reverse' : ''}`;
+            div.className = `flex items-start gap-5 ${role === 'user' ? 'flex-row-reverse animate-slide-left' : 'animate-slide-right'}`;
             div.innerHTML = `
-                <div class="w-10 h-10 rounded-2xl flex-shrink-0 flex items-center justify-center ${role === 'user' ? 'bg-slate-800' : 'bg-indigo-600 text-white shadow-lg'}"><i class="fas ${role === 'user' ? 'fa-user' : 'fa-robot'}"></i></div>
-                <div class="px-6 py-4 rounded-[1.8rem] text-sm max-w-[85%] leading-relaxed ${role === 'user' ? 'bg-indigo-600 text-white shadow-2xl' : 'bg-[#1e293b] text-slate-200 border border-slate-700'}">${text}</div>
+                <div class="w-12 h-12 rounded-[1.2rem] flex-shrink-0 flex items-center justify-center ${role === 'user' ? 'bg-slate-800 border border-white/5' : 'bg-indigo-600 shadow-[0_0_20px_#6366f144] text-white'}"><i class="fas ${role === 'user' ? 'fa-user' : 'fa-robot'}"></i></div>
+                <div class="px-7 py-5 rounded-[2rem] text-sm max-w-[80%] leading-relaxed ${role === 'user' ? 'bg-indigo-600 text-white shadow-xl' : 'glass-card text-slate-200'}">${text}</div>
             `;
             win.appendChild(div);
             win.scrollTop = win.scrollHeight;
             if (window.MathJax) window.MathJax.typesetPromise([div]);
         }
 
-        function saveHistory() { localStorage.setItem('mega_v2_history', JSON.stringify(chatHistory)); }
-        function clearHistory() { if(confirm("確定執行核心重置？所有對話將永久消失。")) { localStorage.removeItem('mega_v2_history'); location.reload(); } }
+        function saveHistory() { localStorage.setItem('phantom_history', JSON.stringify(chatHistory)); }
+        function clearHistory() { if(confirm("確定清除核心數據？")) { localStorage.removeItem('phantom_history'); location.reload(); } }
         function appendSystemMessage(t) {
             const div = document.createElement('div');
-            div.className = "flex justify-center my-4";
-            div.innerHTML = `<span class="text-[9px] bg-indigo-500/10 text-indigo-400 px-4 py-1 rounded-full font-black uppercase tracking-widest">${t}</span>`;
+            div.className = "flex justify-center my-6";
+            div.innerHTML = `<span class="text-[9px] bg-white/5 text-slate-500 px-5 py-2 rounded-full font-black uppercase tracking-[0.4em] border border-white/5">${t}</span>`;
             document.getElementById('chat-window').appendChild(div);
         }
 
         function setSubject(sub) {
             currentSubject = sub;
             document.querySelectorAll('.sub-btn').forEach(b => {
-                b.className = b.innerText === sub ? "sub-btn px-6 py-2 rounded-full bg-indigo-600 text-white text-[11px] font-black shadow-lg" : "sub-btn px-6 py-2 rounded-full bg-slate-800 text-slate-400 text-[11px] font-black hover:bg-slate-700";
+                b.className = b.innerText === sub ? "sub-btn px-6 py-2 rounded-xl bg-indigo-600 text-white text-[11px] font-black shadow-lg" : "sub-btn px-6 py-2 rounded-xl bg-white/5 text-slate-400 text-[11px] font-black hover:bg-white/10";
             });
             appendSystemMessage(`Switch Mode: ${sub}`);
         }
 
-        function exportToPDF() {
-            appendSystemMessage("正在渲染 PDF 引擎...");
-            const element = document.getElementById('chat-window');
-            html2pdf().from(element).save(`MEGA_Note_${Date.now()}.pdf`);
-        }
-
+        function exportToPDF() { html2pdf().from(document.getElementById('chat-window')).save(`Note_${Date.now()}.pdf`); }
         window.onload = () => {
             initModelCards();
             chatHistory.forEach(m => appendMessage(m.role, m.content));
-            if(chatHistory.length === 0) appendMessage('ai', "核心已啟動。隨時準備為閣下提供最深度的學術支援。");
+            if(chatHistory.length === 0) appendMessage('ai', "核心已啟動。準備好進行高階學術交互。");
         };
 
-        // 自動調整文字框高度
-        document.getElementById('user-input').addEventListener('input', function() {
-            this.style.height = 'auto';
-            this.style.height = (this.scrollHeight) + 'px';
-        });
+        document.getElementById('user-input').addEventListener('input', function() { this.style.height = 'auto'; this.style.height = (this.scrollHeight) + 'px'; });
     </script>
 </body>
 </html>
