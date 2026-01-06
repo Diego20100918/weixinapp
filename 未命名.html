@@ -1,0 +1,229 @@
+<!DOCTYPE html PUBLIC "-//W3C//DTD HTML 4.01//EN" "http://www.w3.org/TR/html4/strict.dtd">
+<html>
+<head>
+  <meta http-equiv="Content-Type" content="text/html; charset=utf-8">
+  <meta http-equiv="Content-Style-Type" content="text/css">
+  <title></title>
+  <meta name="Generator" content="Cocoa HTML Writer">
+  <meta name="CocoaVersion" content="2685.1">
+  <style type="text/css">
+    p.p1 {margin: 0.0px 0.0px 0.0px 0.0px; font: 12.0px Helvetica}
+    p.p2 {margin: 0.0px 0.0px 0.0px 0.0px; font: 12.0px Helvetica; min-height: 14.0px}
+  </style>
+</head>
+<body>
+<p class="p1">&lt;!DOCTYPE html&gt;</p>
+<p class="p1">&lt;html lang="zh-HK"&gt;</p>
+<p class="p1">&lt;head&gt;</p>
+<p class="p1"><span class="Apple-converted-space">    </span>&lt;meta charset="UTF-8"&gt;</p>
+<p class="p1"><span class="Apple-converted-space">    </span>&lt;meta name="viewport" content="width=device-width, initial-scale=1.0"&gt;</p>
+<p class="p1"><span class="Apple-converted-space">    </span>&lt;title&gt;AI 學習助手 - PDF 導出增強版&lt;/title&gt;</p>
+<p class="p1"><span class="Apple-converted-space">    </span>&lt;script src="https://cdn.tailwindcss.com"&gt;&lt;/script&gt;</p>
+<p class="p1"><span class="Apple-converted-space">    </span>&lt;link href="https://cdnjs.cloudflare.com/ajax/libs/font-awesome/6.0.0/css/all.min.css" rel="stylesheet"&gt;</p>
+<p class="p2"><span class="Apple-converted-space">    </span></p>
+<p class="p1"><span class="Apple-converted-space">    </span>&lt;script src="https://cdnjs.cloudflare.com/ajax/libs/html2pdf.js/0.10.1/html2pdf.bundle.min.js"&gt;&lt;/script&gt;</p>
+<p class="p2"><br></p>
+<p class="p1"><span class="Apple-converted-space">    </span>&lt;script&gt;</p>
+<p class="p1"><span class="Apple-converted-space">        </span>window.MathJax = {</p>
+<p class="p1"><span class="Apple-converted-space">            </span>tex: { inlineMath: [['$', '$'], ['\\(', '\\)']], displayMath: [['$$', '$$']] },</p>
+<p class="p1"><span class="Apple-converted-space">            </span>options: { skipHtmlTags: ['script', 'noscript', 'style', 'textarea', 'pre'] }</p>
+<p class="p1"><span class="Apple-converted-space">        </span>};</p>
+<p class="p1"><span class="Apple-converted-space">    </span>&lt;/script&gt;</p>
+<p class="p1"><span class="Apple-converted-space">    </span>&lt;script id="MathJax-script" async src="https://cdn.jsdelivr.net/npm/mathjax@3/es5/tex-mml-chtml.js"&gt;&lt;/script&gt;</p>
+<p class="p2"><br></p>
+<p class="p1"><span class="Apple-converted-space">    </span>&lt;style&gt;</p>
+<p class="p1"><span class="Apple-converted-space">        </span>.chat-container { height: calc(100vh - 220px); }</p>
+<p class="p1"><span class="Apple-converted-space">        </span>.custom-scrollbar::-webkit-scrollbar { width: 4px; }</p>
+<p class="p1"><span class="Apple-converted-space">        </span>.custom-scrollbar::-webkit-scrollbar-thumb { background: #cbd5e1; border-radius: 10px; }</p>
+<p class="p1"><span class="Apple-converted-space">        </span>/* 導出 PDF 時的特定樣式調整 */</p>
+<p class="p1"><span class="Apple-converted-space">        </span>.pdf-export-mode { padding: 20px !important; background: white !important; }</p>
+<p class="p1"><span class="Apple-converted-space">    </span>&lt;/style&gt;</p>
+<p class="p1">&lt;/head&gt;</p>
+<p class="p1">&lt;body class="bg-slate-50 font-sans text-slate-900"&gt;</p>
+<p class="p2"><br></p>
+<p class="p1"><span class="Apple-converted-space">    </span>&lt;div class="flex h-screen overflow-hidden"&gt;</p>
+<p class="p1"><span class="Apple-converted-space">        </span>&lt;aside class="w-64 bg-slate-900 text-white hidden md:flex flex-col"&gt;</p>
+<p class="p1"><span class="Apple-converted-space">            </span>&lt;div class="p-5 border-b border-slate-700 space-y-3"&gt;</p>
+<p class="p1"><span class="Apple-converted-space">                </span>&lt;button onclick="location.reload()" class="w-full bg-indigo-600 hover:bg-indigo-700 py-2.5 rounded-xl transition-all flex items-center justify-center gap-2 text-sm font-medium shadow-lg"&gt;</p>
+<p class="p1"><span class="Apple-converted-space">                    </span>&lt;i class="fas fa-plus"&gt;&lt;/i&gt; 新對話</p>
+<p class="p1"><span class="Apple-converted-space">                </span>&lt;/button&gt;</p>
+<p class="p2"><span class="Apple-converted-space">                </span></p>
+<p class="p1"><span class="Apple-converted-space">                </span>&lt;button onclick="exportToPDF()" class="w-full bg-emerald-600 hover:bg-emerald-700 py-2.5 rounded-xl transition-all flex items-center justify-center gap-2 text-sm font-medium shadow-lg"&gt;</p>
+<p class="p1"><span class="Apple-converted-space">                    </span>&lt;i class="fas fa-file-pdf"&gt;&lt;/i&gt; 儲存為 PDF 筆記</p>
+<p class="p1"><span class="Apple-converted-space">                </span>&lt;/button&gt;</p>
+<p class="p1"><span class="Apple-converted-space">            </span>&lt;/div&gt;</p>
+<p class="p2"><span class="Apple-converted-space">            </span></p>
+<p class="p1"><span class="Apple-converted-space">            </span>&lt;div class="flex-1 overflow-y-auto custom-scrollbar p-3" id="history-list"&gt;</p>
+<p class="p1"><span class="Apple-converted-space">                </span>&lt;h3 class="text-[10px] font-bold text-slate-500 px-2 py-4 uppercase tracking-[0.2em]"&gt;功能說明&lt;/h3&gt;</p>
+<p class="p1"><span class="Apple-converted-space">                </span>&lt;div class="p-3 text-xs text-slate-400 leading-relaxed bg-slate-800/30 rounded-lg"&gt;</p>
+<p class="p1"><span class="Apple-converted-space">                    </span>完成對話後，點擊上方綠色按鈕可將解題過程保存為 PDF 檔案，方便離線複習。</p>
+<p class="p1"><span class="Apple-converted-space">                </span>&lt;/div&gt;</p>
+<p class="p1"><span class="Apple-converted-space">            </span>&lt;/div&gt;</p>
+<p class="p2"><span class="Apple-converted-space">            </span></p>
+<p class="p1"><span class="Apple-converted-space">            </span>&lt;div class="p-4 bg-slate-950 text-[10px] text-slate-400"&gt;</p>
+<p class="p1"><span class="Apple-converted-space">                </span>當前科目：&lt;span id="sidebar-subject" class="text-indigo-400"&gt;綜合&lt;/span&gt;</p>
+<p class="p1"><span class="Apple-converted-space">            </span>&lt;/div&gt;</p>
+<p class="p1"><span class="Apple-converted-space">        </span>&lt;/aside&gt;</p>
+<p class="p2"><br></p>
+<p class="p1"><span class="Apple-converted-space">        </span>&lt;main class="flex-1 flex flex-col relative"&gt;</p>
+<p class="p1"><span class="Apple-converted-space">            </span>&lt;header class="bg-white/80 backdrop-blur-md shadow-sm p-4 flex items-center justify-between sticky top-0 z-10"&gt;</p>
+<p class="p1"><span class="Apple-converted-space">                </span>&lt;div class="flex gap-2 bg-slate-100 p-1 rounded-xl"&gt;</p>
+<p class="p1"><span class="Apple-converted-space">                    </span>&lt;button onclick="setSubject('綜合')" class="sub-btn px-4 py-1.5 rounded-lg bg-white shadow-sm text-indigo-700 text-xs font-bold"&gt;綜合&lt;/button&gt;</p>
+<p class="p1"><span class="Apple-converted-space">                    </span>&lt;button onclick="setSubject('數學')" class="sub-btn px-4 py-1.5 rounded-lg text-slate-500 text-xs font-medium"&gt;數學&lt;/button&gt;</p>
+<p class="p1"><span class="Apple-converted-space">                    </span>&lt;button onclick="setSubject('科學')" class="sub-btn px-4 py-1.5 rounded-lg text-slate-500 text-xs font-medium"&gt;科學&lt;/button&gt;</p>
+<p class="p1"><span class="Apple-converted-space">                </span>&lt;/div&gt;</p>
+<p class="p1"><span class="Apple-converted-space">                </span>&lt;select id="model-select" class="bg-slate-100 border-none text-xs rounded-lg px-3 py-2 font-semibold"&gt;</p>
+<p class="p1"><span class="Apple-converted-space">                    </span>&lt;option value="qwen"&gt;阿里通義 Qwen (推薦)&lt;/option&gt;</p>
+<p class="p1"><span class="Apple-converted-space">                    </span>&lt;option value="deepseek"&gt;DeepSeek&lt;/option&gt;</p>
+<p class="p1"><span class="Apple-converted-space">                </span>&lt;/select&gt;</p>
+<p class="p1"><span class="Apple-converted-space">            </span>&lt;/header&gt;</p>
+<p class="p2"><br></p>
+<p class="p1"><span class="Apple-converted-space">            </span>&lt;div id="chat-window" class="chat-container overflow-y-auto p-4 md:p-8 space-y-6 custom-scrollbar"&gt;</p>
+<p class="p1"><span class="Apple-converted-space">                </span>&lt;div class="flex items-start gap-4"&gt;</p>
+<p class="p1"><span class="Apple-converted-space">                    </span>&lt;div class="w-10 h-10 rounded-xl bg-indigo-600 flex items-center justify-center text-white shadow-lg"&gt;</p>
+<p class="p1"><span class="Apple-converted-space">                        </span>&lt;i class="fas fa-robot"&gt;&lt;/i&gt;</p>
+<p class="p1"><span class="Apple-converted-space">                    </span>&lt;/div&gt;</p>
+<p class="p1"><span class="Apple-converted-space">                    </span>&lt;div class="bg-white p-4 rounded-2xl shadow-sm border border-slate-100 max-w-2xl"&gt;</p>
+<p class="p1"><span class="Apple-converted-space">                        </span>同學你好！我是你的 AI 導師。今天想針對哪些題目做筆記？</p>
+<p class="p1"><span class="Apple-converted-space">                        </span>完成討論後，你可以點擊左邊的&lt;b&gt;「儲存為 PDF 筆記」&lt;/b&gt;將結果存檔。</p>
+<p class="p1"><span class="Apple-converted-space">                    </span>&lt;/div&gt;</p>
+<p class="p1"><span class="Apple-converted-space">                </span>&lt;/div&gt;</p>
+<p class="p1"><span class="Apple-converted-space">            </span>&lt;/div&gt;</p>
+<p class="p2"><br></p>
+<p class="p1"><span class="Apple-converted-space">            </span>&lt;div class="p-4 bg-white border-t border-slate-100"&gt;</p>
+<p class="p1"><span class="Apple-converted-space">                </span>&lt;div class="max-w-4xl mx-auto flex items-end gap-2 bg-slate-50 border border-slate-200 rounded-2xl p-2 shadow-inner focus-within:ring-2 focus-within:ring-indigo-500 transition-all"&gt;</p>
+<p class="p1"><span class="Apple-converted-space">                    </span>&lt;textarea id="user-input" rows="1" placeholder="輸入問題..."<span class="Apple-converted-space"> </span></p>
+<p class="p1"><span class="Apple-converted-space">                        </span>class="flex-1 bg-transparent border-none focus:ring-0 text-sm py-3 px-4 resize-none max-h-32"&gt;&lt;/textarea&gt;</p>
+<p class="p2"><span class="Apple-converted-space">                    </span></p>
+<p class="p1"><span class="Apple-converted-space">                    </span>&lt;button id="send-btn" onclick="sendMessage()" class="bg-indigo-600 text-white w-10 h-10 rounded-xl hover:bg-indigo-700 flex items-center justify-center shadow-md"&gt;</p>
+<p class="p1"><span class="Apple-converted-space">                        </span>&lt;i class="fas fa-arrow-up"&gt;&lt;/i&gt;</p>
+<p class="p1"><span class="Apple-converted-space">                    </span>&lt;/button&gt;</p>
+<p class="p1"><span class="Apple-converted-space">                </span>&lt;/div&gt;</p>
+<p class="p1"><span class="Apple-converted-space">            </span>&lt;/div&gt;</p>
+<p class="p1"><span class="Apple-converted-space">        </span>&lt;/main&gt;</p>
+<p class="p1"><span class="Apple-converted-space">    </span>&lt;/div&gt;</p>
+<p class="p2"><br></p>
+<p class="p1"><span class="Apple-converted-space">    </span>&lt;script&gt;</p>
+<p class="p1"><span class="Apple-converted-space">        </span>const CONFIG = {</p>
+<p class="p1"><span class="Apple-converted-space">            </span>deepseek: { key: 'sk-6722fcd2a3b34d80bede9e71746d2dfc', url: 'https://api.deepseek.com/chat/completions', model: 'deepseek-chat' },</p>
+<p class="p1"><span class="Apple-converted-space">            </span>qwen: { key: 'sk-c5fcac1f9c804077af50a3d1217e92c2', url: 'https://dashscope.aliyuncs.com/compatible-mode/v1/chat/completions', model: 'qwen-plus' }</p>
+<p class="p1"><span class="Apple-converted-space">        </span>};</p>
+<p class="p2"><br></p>
+<p class="p1"><span class="Apple-converted-space">        </span>let currentSubject = '綜合';</p>
+<p class="p1"><span class="Apple-converted-space">        </span>let chatHistory = [];</p>
+<p class="p2"><br></p>
+<p class="p1"><span class="Apple-converted-space">        </span>// 3. 核心 PDF 導出邏輯</p>
+<p class="p1"><span class="Apple-converted-space">        </span>function exportToPDF() {</p>
+<p class="p1"><span class="Apple-converted-space">            </span>const element = document.getElementById('chat-window');</p>
+<p class="p1"><span class="Apple-converted-space">            </span>const dateStr = new Date().toLocaleDateString().replace(/\//g, '-');</p>
+<p class="p1"><span class="Apple-converted-space">            </span>const fileName = `${currentSubject}_學習筆記_${dateStr}.pdf`;</p>
+<p class="p2"><br></p>
+<p class="p1"><span class="Apple-converted-space">            </span>// 配置導出選項</p>
+<p class="p1"><span class="Apple-converted-space">            </span>const opt = {</p>
+<p class="p1"><span class="Apple-converted-space">                </span>margin: <span class="Apple-converted-space">      </span>10,</p>
+<p class="p1"><span class="Apple-converted-space">                </span>filename: <span class="Apple-converted-space">    </span>fileName,</p>
+<p class="p1"><span class="Apple-converted-space">                </span>image:<span class="Apple-converted-space">        </span>{ type: 'jpeg', quality: 0.98 },</p>
+<p class="p1"><span class="Apple-converted-space">                </span>html2canvas:<span class="Apple-converted-space">  </span>{<span class="Apple-converted-space"> </span></p>
+<p class="p1"><span class="Apple-converted-space">                    </span>scale: 2,<span class="Apple-converted-space"> </span></p>
+<p class="p1"><span class="Apple-converted-space">                    </span>useCORS: true,</p>
+<p class="p1"><span class="Apple-converted-space">                    </span>logging: false<span class="Apple-converted-space"> </span></p>
+<p class="p1"><span class="Apple-converted-space">                </span>},</p>
+<p class="p1"><span class="Apple-converted-space">                </span>jsPDF:<span class="Apple-converted-space">        </span>{ unit: 'mm', format: 'a4', orientation: 'portrait' }</p>
+<p class="p1"><span class="Apple-converted-space">            </span>};</p>
+<p class="p2"><br></p>
+<p class="p1"><span class="Apple-converted-space">            </span>// 執行導出</p>
+<p class="p1"><span class="Apple-converted-space">            </span>appendSystemMessage("正在生成 PDF 檔案，請稍候...");</p>
+<p class="p1"><span class="Apple-converted-space">            </span>html2pdf().set(opt).from(element).save().then(() =&gt; {</p>
+<p class="p1"><span class="Apple-converted-space">                </span>console.log("PDF Exported successfully");</p>
+<p class="p1"><span class="Apple-converted-space">            </span>});</p>
+<p class="p1"><span class="Apple-converted-space">        </span>}</p>
+<p class="p2"><br></p>
+<p class="p1"><span class="Apple-converted-space">        </span>function setSubject(sub) {</p>
+<p class="p1"><span class="Apple-converted-space">            </span>currentSubject = sub;</p>
+<p class="p1"><span class="Apple-converted-space">            </span>document.getElementById('sidebar-subject').innerText = sub;</p>
+<p class="p1"><span class="Apple-converted-space">            </span>const buttons = document.querySelectorAll('.sub-btn');</p>
+<p class="p1"><span class="Apple-converted-space">            </span>buttons.forEach(btn =&gt; {</p>
+<p class="p1"><span class="Apple-converted-space">                </span>if(btn.innerText === sub) {</p>
+<p class="p1"><span class="Apple-converted-space">                    </span>btn.className = "sub-btn px-4 py-1.5 rounded-lg bg-white shadow-sm text-indigo-700 text-xs font-bold";</p>
+<p class="p1"><span class="Apple-converted-space">                </span>} else {</p>
+<p class="p1"><span class="Apple-converted-space">                    </span>btn.className = "sub-btn px-4 py-1.5 rounded-lg text-slate-500 text-xs font-medium hover:bg-white/50";</p>
+<p class="p1"><span class="Apple-converted-space">                </span>}</p>
+<p class="p1"><span class="Apple-converted-space">            </span>});</p>
+<p class="p1"><span class="Apple-converted-space">        </span>}</p>
+<p class="p2"><br></p>
+<p class="p1"><span class="Apple-converted-space">        </span>async function sendMessage() {</p>
+<p class="p1"><span class="Apple-converted-space">            </span>const input = document.getElementById('user-input');</p>
+<p class="p1"><span class="Apple-converted-space">            </span>const btn = document.getElementById('send-btn');</p>
+<p class="p1"><span class="Apple-converted-space">            </span>const text = input.value.trim();</p>
+<p class="p1"><span class="Apple-converted-space">            </span>const selectedModel = document.getElementById('model-select').value;</p>
+<p class="p2"><span class="Apple-converted-space">            </span></p>
+<p class="p1"><span class="Apple-converted-space">            </span>if (!text) return;</p>
+<p class="p2"><br></p>
+<p class="p1"><span class="Apple-converted-space">            </span>appendMessage('user', text);</p>
+<p class="p1"><span class="Apple-converted-space">            </span>input.value = '';</p>
+<p class="p1"><span class="Apple-converted-space">            </span>btn.disabled = true;</p>
+<p class="p2"><span class="Apple-converted-space">            </span></p>
+<p class="p1"><span class="Apple-converted-space">            </span>chatHistory.push({ role: "user", content: `(科目:${currentSubject}) ${text}` });</p>
+<p class="p2"><br></p>
+<p class="p1"><span class="Apple-converted-space">            </span>try {</p>
+<p class="p1"><span class="Apple-converted-space">                </span>const config = CONFIG[selectedModel];</p>
+<p class="p1"><span class="Apple-converted-space">                </span>const response = await fetch(config.url, {</p>
+<p class="p1"><span class="Apple-converted-space">                    </span>method: 'POST',</p>
+<p class="p1"><span class="Apple-converted-space">                    </span>headers: { 'Content-Type': 'application/json', 'Authorization': `Bearer ${config.key}` },</p>
+<p class="p1"><span class="Apple-converted-space">                    </span>body: JSON.stringify({ model: config.model, messages: chatHistory })</p>
+<p class="p1"><span class="Apple-converted-space">                </span>});</p>
+<p class="p2"><br></p>
+<p class="p1"><span class="Apple-converted-space">                </span>const data = await response.json();</p>
+<p class="p1"><span class="Apple-converted-space">                </span>const aiReply = data.choices[0].message.content;</p>
+<p class="p2"><br></p>
+<p class="p1"><span class="Apple-converted-space">                </span>appendMessage('ai', aiReply);</p>
+<p class="p1"><span class="Apple-converted-space">                </span>chatHistory.push({ role: "assistant", content: aiReply });</p>
+<p class="p2"><br></p>
+<p class="p1"><span class="Apple-converted-space">            </span>} catch (error) {</p>
+<p class="p1"><span class="Apple-converted-space">                </span>appendMessage('ai', "連線失敗，請檢查 API。");</p>
+<p class="p1"><span class="Apple-converted-space">            </span>} finally {</p>
+<p class="p1"><span class="Apple-converted-space">                </span>btn.disabled = false;</p>
+<p class="p1"><span class="Apple-converted-space">            </span>}</p>
+<p class="p1"><span class="Apple-converted-space">        </span>}</p>
+<p class="p2"><br></p>
+<p class="p1"><span class="Apple-converted-space">        </span>function appendMessage(role, text) {</p>
+<p class="p1"><span class="Apple-converted-space">            </span>const chatWindow = document.getElementById('chat-window');</p>
+<p class="p1"><span class="Apple-converted-space">            </span>const msgDiv = document.createElement('div');</p>
+<p class="p1"><span class="Apple-converted-space">            </span>msgDiv.className = `flex items-start gap-4 ${role === 'user' ? 'flex-row-reverse' : ''}`;</p>
+<p class="p2"><br></p>
+<p class="p1"><span class="Apple-converted-space">            </span>const bubbleClass = role === 'user' ? 'bg-indigo-600 text-white shadow-md' : 'bg-white text-slate-700 border border-slate-100 shadow-sm';</p>
+<p class="p2"><br></p>
+<p class="p1"><span class="Apple-converted-space">            </span>msgDiv.innerHTML = `</p>
+<p class="p1"><span class="Apple-converted-space">                </span>&lt;div class="w-9 h-9 rounded-xl ${role === 'user' ? 'bg-slate-200 text-slate-600' : 'bg-indigo-600 text-white'} flex items-center justify-center flex-shrink-0 text-xs"&gt;</p>
+<p class="p1"><span class="Apple-converted-space">                    </span>&lt;i class="fas ${role === 'user' ? 'fa-user' : 'fa-robot'}"&gt;&lt;/i&gt;</p>
+<p class="p1"><span class="Apple-converted-space">                </span>&lt;/div&gt;</p>
+<p class="p1"><span class="Apple-converted-space">                </span>&lt;div class="${bubbleClass} px-5 py-3 rounded-2xl max-w-[85%] text-sm leading-relaxed"&gt;</p>
+<p class="p1"><span class="Apple-converted-space">                    </span>${text}</p>
+<p class="p1"><span class="Apple-converted-space">                </span>&lt;/div&gt;</p>
+<p class="p1"><span class="Apple-converted-space">            </span>`;</p>
+<p class="p1"><span class="Apple-converted-space">            </span>chatWindow.appendChild(msgDiv);</p>
+<p class="p1"><span class="Apple-converted-space">            </span>chatWindow.scrollTop = chatWindow.scrollHeight;</p>
+<p class="p2"><br></p>
+<p class="p1"><span class="Apple-converted-space">            </span>if (window.MathJax &amp;&amp; window.MathJax.typesetPromise) {</p>
+<p class="p1"><span class="Apple-converted-space">                </span>window.MathJax.typesetPromise([msgDiv]);</p>
+<p class="p1"><span class="Apple-converted-space">            </span>}</p>
+<p class="p1"><span class="Apple-converted-space">        </span>}</p>
+<p class="p2"><br></p>
+<p class="p1"><span class="Apple-converted-space">        </span>function appendSystemMessage(text) {</p>
+<p class="p1"><span class="Apple-converted-space">            </span>const chatWindow = document.getElementById('chat-window');</p>
+<p class="p1"><span class="Apple-converted-space">            </span>const div = document.createElement('div');</p>
+<p class="p1"><span class="Apple-converted-space">            </span>div.className = "flex justify-center my-2";</p>
+<p class="p1"><span class="Apple-converted-space">            </span>div.innerHTML = `&lt;span class="text-[10px] bg-emerald-100 text-emerald-700 px-3 py-1 rounded-full font-bold uppercase tracking-widest"&gt;${text}&lt;/span&gt;`;</p>
+<p class="p1"><span class="Apple-converted-space">            </span>chatWindow.appendChild(div);</p>
+<p class="p1"><span class="Apple-converted-space">            </span>chatWindow.scrollTop = chatWindow.scrollHeight;</p>
+<p class="p1"><span class="Apple-converted-space">        </span>}</p>
+<p class="p2"><br></p>
+<p class="p1"><span class="Apple-converted-space">        </span>document.getElementById('user-input').addEventListener('input', function() {</p>
+<p class="p1"><span class="Apple-converted-space">            </span>this.style.height = 'auto';</p>
+<p class="p1"><span class="Apple-converted-space">            </span>this.style.height = (this.scrollHeight) + 'px';</p>
+<p class="p1"><span class="Apple-converted-space">        </span>});</p>
+<p class="p1"><span class="Apple-converted-space">    </span>&lt;/script&gt;</p>
+<p class="p1">&lt;/body&gt;</p>
+<p class="p1">&lt;/html&gt;</p>
+</body>
+</html>
