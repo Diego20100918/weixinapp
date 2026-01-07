@@ -29,16 +29,16 @@
     <div id="intro-screen" class="fixed inset-0 z-[200] intro-gradient flex items-center justify-center p-6 transition-all duration-700">
         <div class="max-w-3xl w-full glass rounded-[2rem] p-10 text-center shadow-2xl">
             <h1 class="text-4xl font-bold text-white mb-2">AI 學習助手</h1>
-            <p class="text-indigo-400 text-sm font-bold tracking-widest uppercase mb-8">版本 v3.1.0 更新</p>
+            <p class="text-indigo-400 text-sm font-bold tracking-widest uppercase mb-8">版本 v3.1.1 修復更新</p>
             
             <div class="grid grid-cols-1 md:grid-cols-2 gap-4 text-left mb-8">
                 <div class="p-4 rounded-xl bg-white/5 border border-white/5">
-                    <h3 class="text-white font-bold text-sm"><i class="fas fa-layer-group text-indigo-400 mr-2"></i>介面優化</h3>
-                    <p class="text-slate-400 text-xs mt-1">側邊欄佈局重構，現在可以直接看到當前使用的模型，無需進入選單。</p>
+                    <h3 class="text-white font-bold text-sm"><i class="fas fa-magic text-indigo-400 mr-2"></i>智能重置</h3>
+                    <p class="text-slate-400 text-xs mt-1">解決切換模型時嘅身份干擾問題，確保 AI 清楚自己嘅角色設定。</p>
                 </div>
                 <div class="p-4 rounded-xl bg-white/5 border border-white/5">
-                    <h3 class="text-white font-bold text-sm"><i class="fas fa-code-branch text-emerald-400 mr-2"></i>版本規範</h3>
-                    <p class="text-slate-400 text-xs mt-1">引入語義化版本號 (v3.1.0)，系統更新日誌與常見問題已分流顯示。</p>
+                    <h3 class="text-white font-bold text-sm"><i class="fas fa-bug text-emerald-400 mr-2"></i>穩定性修復</h3>
+                    <p class="text-slate-400 text-xs mt-1">優化上下文處理邏輯，提升多模型切換時嘅對話品質。</p>
                 </div>
             </div>
 
@@ -56,35 +56,24 @@
             </div>
             <div class="space-y-6 overflow-y-auto max-h-[60vh] pr-2 custom-scrollbar text-sm">
                 
+                <div class="relative pl-6 border-l-2 border-emerald-500">
+                    <div class="absolute -left-[5px] top-1 w-2.5 h-2.5 rounded-full bg-emerald-500 shadow-[0_0_8px_#10b981]"></div>
+                    <span class="text-xs font-mono text-emerald-400">v3.1.1 (Latest Bug Fix)</span>
+                    <h3 class="font-bold text-white mt-1">解決模型身份干擾</h3>
+                    <ul class="list-disc list-inside mt-2 text-slate-400 text-xs space-y-1">
+                        <li>修正切換模型後 AI 誤認前代身份的問題。</li>
+                        <li>新增「切換模型時清空記憶」的確認機制，確保邏輯清晰。</li>
+                        <li>優化系統提示詞，強制新模型重新加載角色設定。</li>
+                    </ul>
+                </div>
+
                 <div class="relative pl-6 border-l-2 border-indigo-500">
                     <div class="absolute -left-[5px] top-1 w-2.5 h-2.5 rounded-full bg-indigo-500"></div>
-                    <span class="text-xs font-mono text-indigo-400">v3.1.0 (Current)</span>
+                    <span class="text-xs font-mono text-indigo-400">v3.1.0</span>
                     <h3 class="font-bold text-white mt-1">介面重構與體驗優化</h3>
                     <ul class="list-disc list-inside mt-2 text-slate-400 text-xs space-y-1">
-                        <li>將「模型廣場」更名為「模型選擇」，並在側邊欄即時顯示當前模型。</li>
-                        <li>分離「系統更新」與「常見問題」區塊，提升資訊層級清晰度。</li>
-                        <li>優化版本號命名規則 (Semantic Versioning)。</li>
-                    </ul>
-                </div>
-
-                <div class="relative pl-6 border-l-2 border-slate-700">
-                    <div class="absolute -left-[5px] top-1 w-2.5 h-2.5 rounded-full bg-slate-700"></div>
-                    <span class="text-xs font-mono text-slate-500">v3.0.0</span>
-                    <h3 class="font-bold text-slate-300 mt-1">視覺與內核大改版</h3>
-                    <ul class="list-disc list-inside mt-2 text-slate-500 text-xs space-y-1">
-                        <li>導入毛玻璃 (Glassmorphism) UI 設計語言。</li>
-                        <li>全屏介紹頁面與流暢的動態效果。</li>
-                        <li>Safari 語音識別底層兼容性修復。</li>
-                    </ul>
-                </div>
-
-                <div class="relative pl-6 border-l-2 border-slate-800 opacity-60">
-                    <div class="absolute -left-[5px] top-1 w-2.5 h-2.5 rounded-full bg-slate-800"></div>
-                    <span class="text-xs font-mono text-slate-600">v2.0.0</span>
-                    <h3 class="font-bold text-slate-400 mt-1">功能全整合</h3>
-                    <ul class="list-disc list-inside mt-2 text-slate-600 text-xs space-y-1">
-                        <li>新增語音輸入、文件讀取、PDF 導出功能。</li>
-                        <li>加入 LocalStorage 歷史紀錄自動儲存。</li>
+                        <li>將「模型廣場」更名為「模型選擇」，並在側邊欄即時顯示。</li>
+                        <li>分離「系統更新」與「常見問題」區塊。</li>
                     </ul>
                 </div>
             </div>
@@ -98,18 +87,11 @@
                 <h2 class="text-lg font-bold text-white"><i class="fas fa-question-circle mr-2 text-yellow-500"></i>常見問題與說明</h2>
                 <button onclick="toggleIssuesModal(false)" class="text-slate-500 hover:text-white"><i class="fas fa-times"></i></button>
             </div>
-            <div class="space-y-3 text-xs">
+            <div class="space-y-3 text-xs text-slate-400">
+                <p>這裡是關於系統使用中可能遇到的技術限制說明。</p>
                 <div class="p-3 bg-slate-800/50 rounded-lg">
-                    <b class="text-slate-200 block mb-1">Q: 語音輸入沒有反應？</b>
-                    <span class="text-slate-400">A: 這是瀏覽器權限問題。請檢查網址列是否允許了麥克風權限。Safari 用戶請確保 iOS 版本已更新。</span>
-                </div>
-                <div class="p-3 bg-slate-800/50 rounded-lg">
-                    <b class="text-slate-200 block mb-1">Q: POE 模型無法連線？</b>
-                    <span class="text-slate-400">A: 這是因為 POE 官方限制了瀏覽器跨域請求 (CORS)。建議在沒有後端代理的情況下，優先使用 Qwen。</span>
-                </div>
-                <div class="p-3 bg-slate-800/50 rounded-lg">
-                    <b class="text-slate-200 block mb-1">Q: 數學公式顯示亂碼？</b>
-                    <span class="text-slate-400">A: 公式渲染依賴 MathJax 網絡庫，請檢查您的網絡連接是否正常。</span>
+                    <b class="text-slate-200 block mb-1 text-xs">為什麼 AI 有時會說錯自己的名字？</b>
+                    <span>這通常發生在切換模型但保留了對話紀錄時。建議切換模型時選擇「清空紀錄」以獲得最佳體驗。</span>
                 </div>
             </div>
             <button onclick="toggleIssuesModal(false)" class="w-full mt-5 bg-indigo-600 hover:bg-indigo-500 py-2 rounded-lg font-bold text-sm text-white">了解</button>
@@ -132,75 +114,59 @@
                 <h1 class="text-xl font-bold text-white tracking-tight">AI 學習助手</h1>
                 <div class="flex items-center gap-2 mt-2">
                     <div class="w-2 h-2 rounded-full bg-emerald-500 animate-pulse"></div>
-                    <span class="text-[10px] font-mono text-slate-500">v3.1.0 Stable</span>
+                    <span class="text-[10px] font-mono text-slate-500">v3.1.1 Stable</span>
                 </div>
             </div>
 
             <nav class="flex-1 space-y-3">
-                <button onclick="openModelModal()" class="w-full glass-btn p-4 rounded-xl text-left group relative overflow-hidden">
-                    <div class="relative z-10">
-                        <span class="text-xs font-bold text-slate-400 uppercase tracking-wider block mb-1">模型選擇</span>
-                        <div class="flex items-center gap-2">
-                            <i class="fas fa-microchip text-indigo-400"></i>
-                            <span id="sidebar-model-name" class="text-sm font-bold text-white">阿里 Qwen</span>
-                        </div>
-                    </div>
-                    <div class="absolute right-3 top-1/2 -translate-y-1/2 opacity-30 group-hover:translate-x-1 transition-transform">
-                        <i class="fas fa-chevron-right text-xs"></i>
+                <button onclick="openModelModal()" class="w-full glass-btn p-4 rounded-xl text-left group relative">
+                    <span class="text-xs font-bold text-slate-400 uppercase tracking-wider block mb-1">模型選擇</span>
+                    <div class="flex items-center gap-2 text-sm font-bold text-white">
+                        <i class="fas fa-microchip text-indigo-400"></i>
+                        <span id="sidebar-model-name">阿里 Qwen</span>
                     </div>
                 </button>
                 
-                <button onclick="exportToPDF()" class="w-full glass-btn p-4 rounded-xl flex items-center gap-3 group text-slate-300 hover:text-white">
+                <button onclick="exportToPDF()" class="w-full glass-btn p-4 rounded-xl flex items-center gap-3 text-slate-300 hover:text-white">
                     <i class="fas fa-file-pdf text-emerald-500 text-lg"></i>
                     <span class="text-sm font-bold">導出 PDF 筆記</span>
                 </button>
 
-                <button onclick="toggleIssuesModal(true)" class="w-full p-2 text-left text-[11px] text-slate-500 hover:text-slate-300 transition-colors flex items-center gap-2">
+                <button onclick="toggleIssuesModal(true)" class="w-full p-2 text-left text-[11px] text-slate-500 hover:text-slate-300 flex items-center gap-2">
                     <i class="fas fa-info-circle"></i> 常見問題與說明
                 </button>
             </nav>
 
             <div class="pt-6 border-t border-white/5 space-y-3 mt-auto">
-                <button onclick="clearHistory()" class="w-full text-left px-2 text-[10px] text-rose-900/60 hover:text-rose-500 font-bold uppercase tracking-wider transition-colors">
+                <button onclick="clearHistory()" class="w-full text-left px-2 text-[10px] text-rose-900/60 hover:text-rose-500 font-bold uppercase tracking-wider">
                     <i class="fas fa-trash-alt mr-1"></i> 清除歷史紀錄
                 </button>
-
-                <button onclick="toggleVersionModal(true)" class="w-full bg-slate-800 hover:bg-slate-700 py-3 rounded-xl flex items-center justify-center gap-2 text-xs font-bold text-slate-300 transition-all border border-slate-700">
-                    <i class="fas fa-code-branch"></i>
-                    版本更新日誌 (v3.1)
+                <button onclick="toggleVersionModal(true)" class="w-full bg-slate-800 hover:bg-slate-700 py-3 rounded-xl flex items-center justify-center gap-2 text-xs font-bold text-slate-300 border border-slate-700">
+                    <i class="fas fa-code-branch"></i> 版本更新日誌 (v3.1.1)
                 </button>
             </div>
         </aside>
 
-        <main class="flex-1 flex flex-col bg-[#0f172a] relative">
+        <main class="flex-1 flex flex-col bg-[#0f172a]">
             <header class="p-4 border-b border-white/5 bg-slate-900/50 backdrop-blur-md">
                 <div class="flex gap-2 overflow-x-auto no-scrollbar w-full" id="subject-scroll">
-                    <button onclick="setSubject('綜合')" class="sub-btn px-6 py-2 rounded-full bg-indigo-600 text-white text-[11px] font-bold whitespace-nowrap">綜合</button>
-                    <button onclick="setSubject('數學')" class="sub-btn px-6 py-2 rounded-full bg-white/5 text-slate-400 text-[11px] font-bold whitespace-nowrap hover:bg-white/10">數學</button>
-                    <button onclick="setSubject('英文')" class="sub-btn px-6 py-2 rounded-full bg-white/5 text-slate-400 text-[11px] font-bold whitespace-nowrap hover:bg-white/10">英文</button>
-                    <button onclick="setSubject('科學')" class="sub-btn px-6 py-2 rounded-full bg-white/5 text-slate-400 text-[11px] font-bold whitespace-nowrap hover:bg-white/10">科學</button>
-                    <button onclick="setSubject('歷史')" class="sub-btn px-6 py-2 rounded-full bg-white/5 text-slate-400 text-[11px] font-bold whitespace-nowrap hover:bg-white/10">歷史</button>
+                    <button onclick="setSubject('綜合')" class="sub-btn px-6 py-2 rounded-full bg-indigo-600 text-white text-[11px] font-bold">綜合</button>
+                    <button onclick="setSubject('數學')" class="sub-btn px-6 py-2 rounded-full bg-white/5 text-slate-400 text-[11px] font-bold hover:bg-white/10">數學</button>
+                    <button onclick="setSubject('英文')" class="sub-btn px-6 py-2 rounded-full bg-white/5 text-slate-400 text-[11px] font-bold hover:bg-white/10">英文</button>
+                    <button onclick="setSubject('科學')" class="sub-btn px-6 py-2 rounded-full bg-white/5 text-slate-400 text-[11px] font-bold hover:bg-white/10">科學</button>
+                    <button onclick="setSubject('歷史')" class="sub-btn px-6 py-2 rounded-full bg-white/5 text-slate-400 text-[11px] font-bold hover:bg-white/10">歷史</button>
                 </div>
             </header>
 
             <div id="chat-window" class="chat-container overflow-y-auto p-8 space-y-8 custom-scrollbar"></div>
 
-            <div id="file-preview" class="hidden mx-8 p-2 bg-indigo-500/10 border border-indigo-500/20 rounded-t-xl text-[10px] flex items-center justify-between">
-                <span id="file-name" class="text-indigo-400 font-bold truncate"></span>
-                <button onclick="clearFile()" class="text-rose-500 px-2"><i class="fas fa-times"></i></button>
-            </div>
-
             <div class="p-6 bg-slate-900/80 backdrop-blur-xl border-t border-white/5">
                 <div class="max-w-4xl mx-auto flex items-end gap-3 bg-slate-800/50 border border-white/10 rounded-[2rem] p-2 focus-within:border-indigo-500/50 transition-all shadow-xl">
-                    <button onclick="document.getElementById('file-input').click()" class="p-4 text-slate-400 hover:text-white transition-colors"><i class="fas fa-paperclip text-lg"></i></button>
+                    <button onclick="document.getElementById('file-input').click()" class="p-4 text-slate-400 hover:text-white"><i class="fas fa-paperclip text-lg"></i></button>
                     <input type="file" id="file-input" class="hidden" onchange="handleFile(event)">
-                    
                     <textarea id="user-input" rows="1" placeholder="輸入內容..." class="flex-1 bg-transparent border-none focus:ring-0 text-sm py-4 px-2 text-white resize-none"></textarea>
-                    
-                    <button id="voice-btn" onclick="toggleVoice()" class="p-4 text-slate-400 hover:text-rose-500 transition-all"><i class="fas fa-microphone text-lg" id="mic-icon"></i></button>
-                    <button id="send-btn" onclick="sendMessage()" class="bg-indigo-600 text-white w-14 h-14 rounded-[1.5rem] hover:bg-indigo-500 flex items-center justify-center transition-all active:scale-95 shadow-lg">
-                        <i class="fas fa-paper-plane text-lg"></i>
-                    </button>
+                    <button id="voice-btn" onclick="toggleVoice()" class="p-4 text-slate-400 hover:text-rose-400 transition-all"><i class="fas fa-microphone text-lg" id="mic-icon"></i></button>
+                    <button id="send-btn" onclick="sendMessage()" class="bg-indigo-600 text-white w-14 h-14 rounded-[1.5rem] hover:bg-indigo-500 flex items-center justify-center shadow-lg active:scale-95"><i class="fas fa-paper-plane text-lg"></i></button>
                 </div>
             </div>
         </main>
@@ -208,7 +174,7 @@
 
     <script>
         const CONFIG = {
-            qwen: { name: "阿里 Qwen", key: 'sk-c5fcac1f9c804077af50a3d1217e92c2', url: 'https://dashscope.aliyuncs.com/compatible-mode/v1/chat/completions', model: 'qwen-plus', icon: 'fa-cloud', color: 'indigo', pros: "高連線穩定度，適合即時互動。", cons: "深度推理細節稍顯簡略。" },
+            qwen: { name: "阿里 Qwen", key: 'sk-c5fcac1f9c804077af50a3d1217e92c2', url: 'https://dashscope.aliyuncs.com/compatible-mode/v1/chat/completions', model: 'qwen-plus', icon: 'fa-cloud', color: 'indigo', pros: "高穩定性，適合即時互動。", cons: "長文本推理偶爾較簡略。" },
             deepseek: { name: "DeepSeek V3", key: 'sk-6722fcd2a3b34d80bede9e71746d2dfc', url: 'https://api.deepseek.com/chat/completions', model: 'deepseek-chat', icon: 'fa-brain', color: 'pink', pros: "頂尖數學與邏輯建模能力。", cons: "CORS 攔截風險較高。" },
             poe: { name: "POE GPT-4o", key: 'zzOkQ4jDtpyVD9QqB2fuN9XRlIS1r_gijrXN6_gY1Zc', url: 'https://api.poe.com/v1/chat/completions', model: 'GPT-4o', icon: 'fa-bolt', color: 'yellow', pros: "最強大模態模型，語意理解完美。", cons: "環境限制最為嚴苛。" }
         };
@@ -225,7 +191,31 @@
         function openModelModal() { document.getElementById('model-modal').classList.remove('hidden'); initModelCards(); }
         function closeModelModal() { document.getElementById('model-modal').classList.add('hidden'); }
 
-        // 模型卡片與選擇
+        // --- 修復版 模型選擇邏輯 ---
+        function selectModel(id) { 
+            // 檢查是否需要提醒清除紀錄，防止上下文干擾
+            if (chatHistory.length > 0) {
+                const confirmClear = confirm("偵測到已有對話紀錄。切換模型可能會導致 AI 身份混淆（上下文干擾）。\n\n點擊「確定」：清除紀錄並切換（推薦）\n點擊「取消」：保留紀錄繼續對話");
+                if (confirmClear) {
+                    chatHistory = [];
+                    localStorage.removeItem('study_v3_history');
+                    document.getElementById('chat-window').innerHTML = '';
+                    appendSystemMessage("記憶已重置，現在由新模型接手。");
+                } else {
+                    // 如果保留，加入系統提示提醒 AI
+                    chatHistory.push({ role: "system", content: "注意：模型已更換。之前的對話內容來自另一個系統，請以你目前的身份繼續對答。" });
+                    appendSystemMessage("注意：保留了舊語境，AI 可能受之前身份影響。");
+                }
+            }
+
+            selectedModelId = id; 
+            document.getElementById('sidebar-model-name').innerText = CONFIG[id].name;
+            initModelCards(); 
+            closeModelModal(); 
+            appendSystemMessage(`已切換至：${CONFIG[id].name}`); 
+        }
+
+        // --- 模型卡片與測試 ---
         function initModelCards() {
             const container = document.getElementById('model-cards');
             container.innerHTML = '';
@@ -243,7 +233,7 @@
                         <p><b class="text-rose-500">缺點:</b> ${m.cons}</p>
                     </div>
                     <div class="space-y-2">
-                        <button onclick="testModel('${id}', this)" class="w-full py-2 bg-slate-700 rounded-lg text-xs font-bold hover:bg-slate-600 transition-all text-white">連線測試</button>
+                        <button onclick="testModel('${id}', this)" class="w-full py-2 bg-slate-700 rounded-lg text-xs font-bold hover:bg-slate-600 text-white">連線測試</button>
                         <button onclick="selectModel('${id}')" class="w-full py-3 ${selectedModelId === id ? 'bg-indigo-600' : 'bg-slate-900'} text-white rounded-xl text-sm font-bold">${selectedModelId === id ? '使用中' : '選擇此模型'}</button>
                     </div>`;
                 container.appendChild(card);
@@ -255,20 +245,12 @@
             btn.innerHTML = '<i class="fas fa-spinner fa-spin"></i>';
             try {
                 const res = await fetch(config.url, { method: 'POST', headers: { 'Content-Type': 'application/json', 'Authorization': `Bearer ${config.key}` }, body: JSON.stringify({ model: config.model, messages: [{role:"user",content:"hi"}], max_tokens: 5 }) });
-                btn.innerHTML = res.ok ? "✅ 連線成功" : `❌ 失敗(${res.status})`;
+                btn.innerHTML = res.ok ? "✅ 成功" : `❌ 失敗(${res.status})`;
             } catch { btn.innerHTML = "❌ CORS 攔截"; }
             setTimeout(() => btn.innerText = "連線測試", 2000);
         }
 
-        function selectModel(id) { 
-            selectedModelId = id; 
-            document.getElementById('sidebar-model-name').innerText = CONFIG[id].name; // 更新側邊欄顯示
-            initModelCards(); 
-            closeModelModal(); 
-            appendSystemMessage(`已切換模型：${CONFIG[id].name}`); 
-        }
-
-        // 語音識別
+        // --- 語音、文件與發送 ---
         const SpeechRecognition = window.SpeechRecognition || window.webkitSpeechRecognition;
         let recognition = null;
         if (SpeechRecognition) {
@@ -277,10 +259,9 @@
             recognition.onresult = (e) => { document.getElementById('user-input').value += e.results[0][0].transcript; toggleVoiceUI(false); };
             recognition.onend = () => toggleVoiceUI(false);
         }
-        function toggleVoice() { if (!recognition) return alert("瀏覽器不支援"); toggleVoiceUI(true); try { recognition.start(); } catch(e) { recognition.stop(); } }
+        function toggleVoice() { if (!recognition) return alert("不支援語音輸入"); toggleVoiceUI(true); try { recognition.start(); } catch(e) { recognition.stop(); } }
         function toggleVoiceUI(isRec) { document.getElementById('mic-icon').classList.toggle('recording', isRec); }
 
-        // 文件上傳
         function handleFile(e) {
             const file = e.target.files[0];
             if(!file) return;
@@ -290,12 +271,11 @@
         }
         function clearFile() { attachedContent = ""; document.getElementById('file-preview').classList.add('hidden'); }
 
-        // 聊天邏輯
         async function sendMessage() {
             const input = document.getElementById('user-input');
             const text = input.value.trim();
             if(!text && !attachedContent) return;
-            appendMessage('user', text || "讀取文件...");
+            appendMessage('user', text || "處理文件中...");
             input.value = '';
             chatHistory.push({ role: "user", content: `(科目: ${currentSubject}) ${attachedContent ? '[文件]: '+attachedContent : ''} ${text}` });
             saveHistory();
@@ -312,7 +292,7 @@
                 chatHistory.push({ role: "assistant", content: aiReply });
                 saveHistory();
                 clearFile();
-            } catch { appendMessage('ai', "連線失敗，請在模型選擇中進行測試。"); }
+            } catch { appendMessage('ai', "連線中斷，請重試或測試連線性。"); }
         }
 
         function appendMessage(role, text) {
@@ -328,7 +308,7 @@
         }
 
         function saveHistory() { localStorage.setItem('study_v3_history', JSON.stringify(chatHistory)); }
-        function clearHistory() { if(confirm("確定清除紀錄？")) { localStorage.removeItem('study_v3_history'); location.reload(); } }
+        function clearHistory() { if(confirm("確定重置？")) { localStorage.removeItem('study_v3_history'); location.reload(); } }
         function appendSystemMessage(t) {
             const div = document.createElement('div');
             div.className = "flex justify-center my-4";
@@ -339,17 +319,17 @@
         function setSubject(sub) {
             currentSubject = sub;
             document.querySelectorAll('.sub-btn').forEach(b => {
-                b.className = b.innerText === sub ? "sub-btn px-6 py-2 rounded-full bg-indigo-600 text-white text-[11px] font-bold whitespace-nowrap shadow-lg" : "sub-btn px-6 py-2 rounded-full bg-white/5 text-slate-400 text-[11px] font-bold whitespace-nowrap hover:bg-white/10";
+                b.className = b.innerText === sub ? "sub-btn px-6 py-2 rounded-full bg-indigo-600 text-white text-[11px] font-bold shadow-lg" : "sub-btn px-6 py-2 rounded-full bg-white/5 text-slate-400 text-[11px] font-bold hover:bg-white/10";
             });
-            appendSystemMessage(`科目：${sub}`);
+            appendSystemMessage(`學科：${sub}`);
         }
 
-        function exportToPDF() { html2pdf().from(document.getElementById('chat-window')).save(`Note_${Date.now()}.pdf`); }
+        function exportToPDF() { html2pdf().from(document.getElementById('chat-window')).save(`Notes_${Date.now()}.pdf`); }
 
         window.onload = () => {
             document.getElementById('sidebar-model-name').innerText = CONFIG[selectedModelId].name;
             chatHistory.forEach(m => appendMessage(m.role, m.content));
-            if(chatHistory.length === 0) appendMessage('ai', "歡迎使用 v3.1 學習系統。");
+            if(chatHistory.length === 0) appendMessage('ai', "系統已就緒，請隨時提問。");
         };
 
         document.getElementById('user-input').addEventListener('input', function() { this.style.height = 'auto'; this.style.height = (this.scrollHeight) + 'px'; });
